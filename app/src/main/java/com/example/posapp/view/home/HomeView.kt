@@ -26,7 +26,9 @@ import com.example.posapp.widgets.implement.MenuContent
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun HomeView() {
+fun HomeView(
+    addButton:() -> Unit
+) {
     val search = remember {
         mutableStateOf("")
     }
@@ -118,7 +120,7 @@ fun HomeView() {
                     itemsIndexed(rekomendasi) {
                         index, item ->
                         MenuContent(item, fotoMakanan, index, namaMakanan, hargaMakanan) {
-
+                        addButton.invoke()
                         }
                         Spacer(modifier = Modifier.height(12.dp))
                     }

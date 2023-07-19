@@ -24,7 +24,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MenuView() {
+fun MenuView(
+    addButton: () -> Unit
+) {
 
     val category = listOf(
         "Makanan",
@@ -115,58 +117,62 @@ fun MenuView() {
                 Modifier
                     .padding(start = 18.dp, end = 18.dp, top = 8.dp, bottom = 8.dp)
             ) {
-               Box(modifier = Modifier
-                   .fillMaxWidth()
-                   .wrapContentWidth(CenterHorizontally)) {
-                   Text(text = "Menu Produk",
-                       style = MaterialTheme.typography.h1,
-                       color = MaterialTheme.colors.surface,
-                       fontSize = 14.sp)
-               }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(CenterHorizontally)
+                ) {
+                    Text(
+                        text = "Menu Produk",
+                        style = MaterialTheme.typography.h1,
+                        color = MaterialTheme.colors.surface,
+                        fontSize = 14.sp
+                    )
+                }
                 Spacer(modifier = Modifier.height(14.dp))
                 Row(
                     Modifier
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                   category.forEachIndexed { index,categoryy->
-                       currentSelected.value = currentIndex.value == index
-                       val color by animateColorAsState(
-                           targetValue = if (currentSelected.value) MaterialTheme.colors.primary else Color(
-                               0xFFE5E5E5
-                           )
-                       )
-                       val colorFont by animateColorAsState(targetValue = if (currentSelected.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.secondary)
-                       CategoryTemplate(
-                           color,
-                           colorFont,
-                           currentIndex,
-                           index,
-                           coroutine,
-                           pagerState,
-                           categoryy
-                       )
-                   }
+                    category.forEachIndexed { index, categoryy ->
+                        currentSelected.value = currentIndex.value == index
+                        val color by animateColorAsState(
+                            targetValue = if (currentSelected.value) MaterialTheme.colors.primary else Color(
+                                0xFFE5E5E5
+                            )
+                        )
+                        val colorFont by animateColorAsState(targetValue = if (currentSelected.value) MaterialTheme.colors.onSurface else MaterialTheme.colors.secondary)
+                        CategoryTemplate(
+                            color,
+                            colorFont,
+                            currentIndex,
+                            index,
+                            coroutine,
+                            pagerState,
+                            categoryy
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(14.dp))
-                HorizontalPager(count = category.size, state = pagerState ) {
+                HorizontalPager(count = category.size, state = pagerState) {
                     currentIndex.value = it
-                    when(it) {
-                        0 ->{
+                    when (it) {
+                        0 -> {
                             LazyVerticalGrid(columns = GridCells.Fixed(1),
                                 content = {
                                     itemsIndexed(rekomendasi) { index, item ->
                                         MenuContentGrid(
                                             fotoMakanan = fotoMakanan,
-                                            index = index ,
-                                            namaMakanan = namaMakanan ,
+                                            index = index,
+                                            namaMakanan = namaMakanan,
                                             hargaMakanan = hargaMakanan
                                         ) {
-
+                                            addButton.invoke()
                                         }
 
                                     }
-                                } )
+                                })
                         }
                         else -> {
                             LazyVerticalGrid(columns = GridCells.Fixed(1),
@@ -174,15 +180,15 @@ fun MenuView() {
                                     itemsIndexed(rekomendasi) { index, item ->
                                         MenuContentGrid(
                                             fotoMakanan = fotoMakanan,
-                                            index = index ,
-                                            namaMakanan = namaMakanan ,
+                                            index = index,
+                                            namaMakanan = namaMakanan,
                                             hargaMakanan = hargaMakanan
                                         ) {
 
                                         }
 
                                     }
-                                } )
+                                })
                         }
                     }
                 }
