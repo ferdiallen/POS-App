@@ -8,20 +8,22 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.posapp.widgets.implement.CategoryTemplate
+import androidx.navigation.NavController
+import com.example.posapp.utils.RouteApp
+import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.transaksi.TransaksiOrderTemplate
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 
 @Composable
-fun TransaksiOrder() {
+fun TransaksiOrder(
+    navController: NavController
+) {
 
     val category = listOf(
         "Proses",
@@ -92,7 +94,9 @@ fun TransaksiOrder() {
                                     .fillMaxSize()
                                 ,content = {
                                 items(10) {
-                                    TransaksiOrderTemplate()
+                                    TransaksiOrderTemplate() {
+                                        navController.navigate(RouteApp.DetailOrder.route)
+                                    }
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }
                             })
@@ -103,7 +107,9 @@ fun TransaksiOrder() {
                                     .fillMaxSize()
                                 ,content = {
                                     items(10) {
-                                        TransaksiOrderTemplate()
+                                        TransaksiOrderTemplate(){
+                                            navController.navigate(RouteApp.DetailOrder.route)
+                                        }
                                         Spacer(modifier = Modifier.height(8.dp))
                                     }
                                 })

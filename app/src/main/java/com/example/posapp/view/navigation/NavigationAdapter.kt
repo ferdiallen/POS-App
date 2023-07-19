@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.posapp.utils.NavRoute
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.view.detail_order.DetailOrderView
 import com.example.posapp.view.home.HomeView
 import com.example.posapp.view.menu.MenuView
 import com.example.posapp.view.order.OrderView
@@ -33,7 +34,7 @@ fun NavigationAdapter(navController: NavHostController,
         }
         composable(NavRoute.Transaksi.route) {
             showBottomBar.value = true
-            TransaksiOrder()
+            TransaksiOrder(navController)
         }
         composable(NavRoute.Profile.route) {
             showBottomBar.value = true
@@ -43,6 +44,11 @@ fun NavigationAdapter(navController: NavHostController,
         composable(RouteApp.Pesanan.route) {
             showBottomBar.value = false
             OrderView(navController = navController)
+        }
+        
+        composable(RouteApp.DetailOrder.route) {
+            showBottomBar.value = false
+            DetailOrderView(navController = navController)
         }
     }
 }

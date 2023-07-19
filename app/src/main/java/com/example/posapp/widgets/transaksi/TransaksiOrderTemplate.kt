@@ -1,6 +1,7 @@
 package com.example.posapp.widgets.transaksi
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -11,11 +12,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TransaksiOrderTemplate() {
+fun TransaksiOrderTemplate(onClick:() -> Unit) {
     Surface(
         elevation = 2.dp,
-        color = MaterialTheme.colors.background
+        color = MaterialTheme.colors.background,
+        onClick = {
+            onClick.invoke()
+        }
     ) {
         Row(
             Modifier

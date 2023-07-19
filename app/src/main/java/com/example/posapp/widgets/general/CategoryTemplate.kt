@@ -1,4 +1,4 @@
-package com.example.posapp.widgets.implement
+package com.example.posapp.widgets.general
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

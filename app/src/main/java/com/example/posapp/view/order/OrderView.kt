@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.widgets.general.TopBar
+import com.example.posapp.widgets.order.ItemOrder
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -147,133 +149,5 @@ private fun CatatanField(catatan: MutableState<String>) {
     )
 }
 
-@Composable
-fun ItemOrder(
-    item: Int,
-    namaMakanan: List<String>,
-    index: Int,
-    harga: List<String>,
-    value: MutableState<Int>
-) {
-    Surface(
-        Modifier
-            .fillMaxWidth(),
-        elevation = 6.dp,
-        color = MaterialTheme.colors.background
-    ) {
-        Row(
-            Modifier
-                .padding(
-                    start = 3.dp,
-                    end = 6.dp,
-                    top = 3.dp,
-                    bottom = 3.dp
-                )
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = CenterVertically
-        ) {
-            Row(
-                verticalAlignment = CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = item),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(80.dp)
-                )
-                Spacer(modifier = Modifier.width(3.dp))
-                Column {
-                    Text(
-                        text = namaMakanan[index],
-                        style = MaterialTheme.typography.h1,
-                        color = MaterialTheme.colors.primary,
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = harga[index],
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.secondary,
-                        fontSize = 14.sp
-                    )
-                    Row(
-                        verticalAlignment = CenterVertically
-                    ) {
-                        Image(painter = painterResource(id = R.drawable.icon_b_minus),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
-                                    if (value.value > 0) {
-                                        value.value -= 1
-                                    }
-                                })
-                        Spacer(modifier = Modifier.width(1.dp))
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = MaterialTheme.colors.surface.copy(0.3f),
-                            elevation = 0.dp,
-                            modifier = Modifier
-                                .size(15.dp)
 
-                        ) {
-                            Text(
-                                text = value.value.toString(),
-                                style = MaterialTheme.typography.body2,
-                                color = Color(0xFF979797),
-                                fontSize = 8.sp,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .wrapContentSize(Center),
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(1.dp))
-                        Image(painter = painterResource(id = R.drawable.icon_b_plus),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .clickable {
 
-                                    value.value += 1
-
-                                })
-                    }
-                }
-            }
-            IconButton(onClick = { }) {
-                Icon(painter = painterResource(id = R.drawable.deleteicon),
-                    contentDescription = null,
-                    tint = Color(0xFF3F3F3F))
-            }
-        }
-    }
-}
-
-@Composable
-fun TopBar(navController: NavController, title: String,color:Color) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(onClick = {
-            navController.popBackStack()
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.back_circle),
-                contentDescription = null,
-                tint = MaterialTheme.colors.surface
-            )
-        }
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h1,
-            color = MaterialTheme.colors.surface,
-            fontSize = 14.sp,
-//                modifier = Modifier
-//                    .offset(x=-18.dp)
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.deleteicon),
-            contentDescription = null,
-            tint = color
-        )
-    }
-}
