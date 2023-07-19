@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,8 +41,40 @@ fun MainView() {
 
     showFloat.value = cart.value > 0
 
-    Scaffold(
-        bottomBar = {
+    Box {
+        Scaffold(
+            Modifier
+                .padding(bottom = 48.dp),
+            backgroundColor = Color.Transparent,
+            floatingActionButton = {
+                AnimatedVisibility(visible = showFloat.value) {
+                    FloatingActCart(cart) {
+                        cart.value = 0
+                        navController.navigate(RouteApp.Pesanan.route)
+                    }
+                }
+            },
+            floatingActionButtonPosition = FabPosition.Center
+        ) {
+
+            Surface(
+                Modifier
+                    .padding(it)
+                    .padding(bottom = if (showFloat.value) 48.dp else 0.dp)
+                    .fillMaxSize()
+                ,
+                color = Color.Transparent) {
+                NavigationAdapter(navController = navController,showBottomBar) {
+                    cart.value = cart.value + 1
+                    Log.d("ShowValue ",showFloat.value.toString())
+                }
+
+            }
+
+        }
+        Box(modifier = Modifier
+            .fillMaxHeight()
+            .wrapContentHeight(Bottom)) {
             if (showBottomBar.value) {
                 Surface(
                     color = Color.Transparent,
@@ -54,35 +87,9 @@ fun MainView() {
                     BotNavigation(navController = navController)
                 }
             }
-        },
-        backgroundColor = Color.Transparent,
-        floatingActionButton = {
-            AnimatedVisibility(visible = showFloat.value) {
-                FloatingActCart(cart) {
-                    cart.value = 0
-                    navController.navigate(RouteApp.Pesanan.route)
-                }
-            }
-        },
-        floatingActionButtonPosition = FabPosition.Center
-    ) {
-
-    Surface(
-        Modifier
-            .padding(it)
-            .fillMaxSize()
-        ,
-        color = Color.Transparent) {
-            NavigationAdapter(navController = navController,showBottomBar) {
-                cart.value = cart.value + 1
-                Log.d("ShowValue ",showFloat.value.toString())
-            }
-
+        }
     }
 
-
-
-    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

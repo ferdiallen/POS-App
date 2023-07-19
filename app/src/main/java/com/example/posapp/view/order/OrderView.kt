@@ -108,7 +108,7 @@ fun OrderView(
                     .fillMaxSize()
                     .padding(start = 18.dp, end = 18.dp, top = 8.dp, bottom = 8.dp)
             ) {
-                TopBar(navController, "Pesanan")
+                TopBar(navController, "Pesanan", Color.Transparent)
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn(content = {
                     itemsIndexed(listMakanan) { index, item ->
@@ -249,7 +249,7 @@ fun ItemOrder(
 }
 
 @Composable
-fun TopBar(navController: NavController, title: String) {
+fun TopBar(navController: NavController, title: String,color:Color) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -262,19 +262,18 @@ fun TopBar(navController: NavController, title: String) {
                 tint = MaterialTheme.colors.surface
             )
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth(CenterHorizontally)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h1,
-                color = MaterialTheme.colors.surface,
-                fontSize = 14.sp,
-                modifier = Modifier
-                    .offset(x=-18.dp)
-            )
-        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.h1,
+            color = MaterialTheme.colors.surface,
+            fontSize = 14.sp,
+//                modifier = Modifier
+//                    .offset(x=-18.dp)
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.deleteicon),
+            contentDescription = null,
+            tint = color
+        )
     }
 }
