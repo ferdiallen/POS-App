@@ -21,6 +21,7 @@ import com.example.posapp.view.transaksi.TransaksiOrder
 fun NavigationAdapter(navController: NavHostController,
                       showBottomBar:MutableState<Boolean>,
                       cart:MutableState<Int>,
+                      cetak:() -> Unit,
                       addButton:() -> Unit) {
     NavHost(navController = navController, startDestination = NavRoute.Home.route ) {
         composable(NavRoute.Home.route) {
@@ -62,7 +63,9 @@ fun NavigationAdapter(navController: NavHostController,
 
         composable(RouteApp.PesananSukses.route) {
             showBottomBar.value = false
-            PesananSuksesView()
+            PesananSuksesView() {
+                cetak.invoke()
+            }
         }
     }
 }

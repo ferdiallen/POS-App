@@ -18,7 +18,9 @@ import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
 
 @Composable
-fun PesananSuksesView() {
+fun PesananSuksesView(
+    cetak:() -> Unit
+) {
     Surface(
         Modifier
             .fillMaxSize(),
@@ -96,6 +98,8 @@ fun PesananSuksesView() {
                 Column {
 
                     OutlinedButton(onClick = {
+                        cetak.invoke()
+
                     },
                         modifier = Modifier
                             .fillMaxWidth(),

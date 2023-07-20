@@ -2,8 +2,10 @@ package com.example.posapp.view.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +20,9 @@ import com.example.posapp.R
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Profile () {
+
+    val state = rememberScrollState()
+
     Scaffold (
         backgroundColor = MaterialTheme.colors.background
     ){
@@ -29,6 +34,7 @@ fun Profile () {
             Column(
                 Modifier
                     .fillMaxSize()
+                    .verticalScroll(state)
                     .padding(start = 18.dp, end = 18.dp, top = 8.dp, bottom = 8.dp)
             ) {
                 Box(modifier = Modifier
@@ -76,7 +82,7 @@ fun Profile () {
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Surface(Modifier
                     .fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
@@ -89,7 +95,9 @@ fun Profile () {
                     ) {
                         Surface(onClick = {  },
                             color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -108,7 +116,9 @@ fun Profile () {
                         Spacer(modifier = Modifier.height(10.dp))
                         Surface(onClick = {  },
                             color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -124,18 +134,19 @@ fun Profile () {
                                     color = MaterialTheme.colors.surface)
                             }
                         }
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                         Surface(onClick = {  },
                             color = Color.Transparent,
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .padding(6.dp)
                             ) {
-                                Icon(painter = painterResource(id = R.drawable.manajemen_produk),
+                                Icon(painter = painterResource(id = R.drawable.manajemen_icon),
                                     contentDescription = null )
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(text = "Manajemen Produk",
@@ -145,9 +156,72 @@ fun Profile () {
                             }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
+                        Surface(onClick = {  },
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                            ) {
+                                Icon(painter = painterResource(id = R.drawable.penjualan_icon),
+                                    contentDescription = null )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Data Penjualan",
+                                    style = MaterialTheme.typography.body2,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colors.surface)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Surface(onClick = {  },
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                            ) {
+                                Icon(painter = painterResource(id = R.drawable.pembelian_icon),
+                                    contentDescription = null )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Data Pembelian",
+                                    style = MaterialTheme.typography.body2,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colors.surface)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Surface(onClick = {  },
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                            ) {
+                                Icon(painter = painterResource(id = R.drawable.rekap_laporan),
+                                    contentDescription = null )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Rekap Laporan",
+                                    style = MaterialTheme.typography.body2,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colors.surface)
+                            }
+                        }
+
                     }
                 }
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 Surface(Modifier
                     .fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),

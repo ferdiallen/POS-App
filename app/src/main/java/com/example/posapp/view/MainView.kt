@@ -24,7 +24,9 @@ import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
 
 @Composable
-fun MainView() {
+fun MainView(
+    cetak:() -> Unit
+) {
 
     val navController = rememberNavController()
 
@@ -64,7 +66,12 @@ fun MainView() {
                     .fillMaxSize()
                 ,
                 color = Color.Transparent) {
-                NavigationAdapter(navController = navController,showBottomBar,cart) {
+                NavigationAdapter(navController = navController
+                    ,showBottomBar
+                    ,cart,
+                    cetak = {
+                        cetak.invoke()
+                    }) {
                     cart.value = cart.value + 1
                     Log.d("ShowValue ",showFloat.value.toString())
                 }
