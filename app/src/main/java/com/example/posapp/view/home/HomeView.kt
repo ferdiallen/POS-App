@@ -9,7 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 import com.example.posapp.widgets.home.HeaderHome
 import com.example.posapp.widgets.home.SearchBar
 import com.example.posapp.widgets.general.MenuContent
@@ -17,7 +19,8 @@ import com.example.posapp.widgets.general.MenuContent
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeView(
-    addButton:() -> Unit
+    navController: NavController,
+    addButton: () -> Unit
 ) {
     val search = remember {
         mutableStateOf("")
@@ -83,7 +86,7 @@ fun HomeView(
             R.drawable.air_putih
         ),
 
-    )
+        )
 
     Scaffold(
         Modifier
@@ -93,28 +96,26 @@ fun HomeView(
         Surface(
             Modifier
                 .fillMaxSize()
-                .padding(it)
-               ,
+                .padding(it),
             color = MaterialTheme.colors.background
         ) {
-            Column (
+            Column(
                 Modifier
                     .padding(start = 18.dp, end = 18.dp, top = 8.dp, bottom = 8.dp)
-                    ) {
+            ) {
                 HeaderHome()
                 Spacer(modifier = Modifier.height(24.dp))
                 SearchBar(search)
                 Spacer(modifier = Modifier.height(12.dp))
                 LazyColumn(
                     content = {
-                    itemsIndexed(rekomendasi) {
-                        index, item ->
-                        MenuContent(item, fotoMakanan, index, namaMakanan, hargaMakanan) {
-                        addButton.invoke()
+                        itemsIndexed(rekomendasi) { index, item ->
+                            MenuContent(navController,item, fotoMakanan, index, namaMakanan, hargaMakanan) {
+                                addButton.invoke()
+                            }
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
-                    }
-                })
+                    })
 
             }
         }

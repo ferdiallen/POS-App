@@ -18,11 +18,11 @@ import com.example.posapp.R
 
 
 @Composable
-fun TopBar(navController: NavController, title: String, color: Color) {
+fun TopBar(navController: NavController, title: String, color: Color,modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         IconButton(onClick = {

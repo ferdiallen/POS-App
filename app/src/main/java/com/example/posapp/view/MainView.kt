@@ -44,7 +44,7 @@ fun MainView() {
     Box {
         Scaffold(
             Modifier
-                .padding(bottom = 48.dp),
+                .padding(bottom = if(showBottomBar.value)48.dp else 0.dp),
             backgroundColor = Color.Transparent,
             floatingActionButton = {
                 AnimatedVisibility(visible = showFloat.value) {
@@ -64,7 +64,7 @@ fun MainView() {
                     .fillMaxSize()
                 ,
                 color = Color.Transparent) {
-                NavigationAdapter(navController = navController,showBottomBar) {
+                NavigationAdapter(navController = navController,showBottomBar,cart) {
                     cart.value = cart.value + 1
                     Log.d("ShowValue ",showFloat.value.toString())
                 }

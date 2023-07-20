@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 import com.example.posapp.widgets.general.TopBar
 import com.example.posapp.widgets.order.ItemOrder
 
@@ -81,7 +82,9 @@ fun OrderView(
                         color = MaterialTheme.colors.surface)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
-                Button(onClick = {  },
+                Button(onClick = {
+                                 navController.navigate(RouteApp.PesananSukses.route)
+                },
                     modifier = Modifier
                         .fillMaxWidth(),
                 shape = RoundedCornerShape(5.dp),

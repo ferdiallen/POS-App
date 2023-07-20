@@ -11,11 +11,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 fun MenuContent(
+    navController: NavController,
     item: String,
     fotoMakanan: List<List<Int>>,
     index: Int,
@@ -42,7 +45,10 @@ fun MenuContent(
                     color = MaterialTheme.colors.background,
                     elevation = 6.dp,
                     modifier = Modifier
-                        .width(150.dp)
+                        .width(150.dp),
+                    onClick = {
+                        navController.navigate(RouteApp.DetailProduk.route)
+                    }
                 ) {
                     Column {
                         Box(

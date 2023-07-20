@@ -11,7 +11,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
+import com.example.posapp.widgets.general.AddButton
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
@@ -20,6 +23,7 @@ fun MenuContentGrid(
     index: Int,
     namaMakanan: List<List<String>>,
     hargaMakanan: List<List<String>>,
+    navController:NavController,
     clickListener:() -> Unit
 ) {
         Row(
@@ -34,7 +38,11 @@ fun MenuContentGrid(
                     color = MaterialTheme.colors.background,
                     elevation = 6.dp,
                     modifier = Modifier
-                        .width(150.dp)
+                        .width(150.dp),
+                    onClick = {
+                        navController.navigate(RouteApp.DetailProduk.route)
+
+                    }
                 ) {
                     Column {
                         Box(
@@ -71,21 +79,7 @@ fun MenuContentGrid(
                                     fontSize = 8.sp
                                 )
                             }
-                            Surface(
-                                onClick = {
-                                    clickListener.invoke()
-                                },
-                                color = MaterialTheme.colors.primary,
-                                shape = RoundedCornerShape(6.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.plus),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(8.dp)
-                                        .size(8.dp)
-                                )
-                            }
+                            AddButton(clickListener)
                         }
                     }
                 }
@@ -94,3 +88,4 @@ fun MenuContentGrid(
         }
 
 }
+

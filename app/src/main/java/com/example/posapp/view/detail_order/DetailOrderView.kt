@@ -21,7 +21,6 @@ fun DetailOrderView(
 ) {
 
     val state = rememberScrollState()
-
     Box {
         Scaffold (
             backgroundColor = MaterialTheme.colors.background,

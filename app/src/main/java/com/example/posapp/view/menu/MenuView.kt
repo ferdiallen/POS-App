@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.posapp.R
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
@@ -20,6 +21,7 @@ import com.example.posapp.widgets.menu.MenuContentGrid
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MenuView(
+    navController:NavController,
     addButton: () -> Unit
 ) {
 
@@ -161,7 +163,8 @@ fun MenuView(
                                             fotoMakanan = fotoMakanan,
                                             index = index,
                                             namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan
+                                            hargaMakanan = hargaMakanan,
+                                            navController
                                         ) {
                                             addButton.invoke()
                                         }
@@ -177,7 +180,8 @@ fun MenuView(
                                             fotoMakanan = fotoMakanan,
                                             index = index,
                                             namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan
+                                            hargaMakanan = hargaMakanan,
+                                            navController
                                         ) {
 
                                         }

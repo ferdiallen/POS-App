@@ -10,25 +10,43 @@ import com.example.posapp.R
 
 // Set of Material typography styles to start with
 
-val poppins = FontFamily(listOf(
-    Font(R.font.poppins_bold,
-        weight = FontWeight.Bold),
-    Font(R.font.poppins_medium,
-        weight = FontWeight.Medium),
-    Font(R.font.poppins_regular,
-        weight = FontWeight.Normal
-    ),
-    Font(R.font.poppins_semibold,
-        weight = FontWeight.SemiBold
+val poppins = FontFamily(
+    listOf(
+        Font(
+            R.font.poppins_bold,
+            weight = FontWeight.Bold
+        ),
+        Font(
+            R.font.poppins_medium,
+            weight = FontWeight.Medium
+        ),
+        Font(
+            R.font.poppins_regular,
+            weight = FontWeight.Normal
+        ),
+        Font(
+            R.font.poppins_semibold,
+            weight = FontWeight.SemiBold
+        )
     )
+)
 
-))
+val potta = FontFamily(
+    listOf(
+        Font(R.font.pottaone_regular,
+            weight = FontWeight.Medium)
+    )
+)
 
-val rubik = FontFamily(listOf(
-    Font(R.font.rubik_medium,
-        weight = FontWeight.Medium)
+val rubik = FontFamily(
+    listOf(
+        Font(
+            R.font.rubik_medium,
+            weight = FontWeight.Medium
+        )
 
-))
+    )
+)
 
 val Typography = Typography(
     body1 = TextStyle(
@@ -51,6 +69,10 @@ val Typography = Typography(
         fontFamily = poppins,
         fontWeight = FontWeight.SemiBold,
     ),
+    caption = TextStyle(
+        fontFamily = potta,
+        fontWeight = FontWeight.Medium,
+    )
     /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,

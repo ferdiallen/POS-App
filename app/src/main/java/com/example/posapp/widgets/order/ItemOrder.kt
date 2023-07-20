@@ -71,18 +71,18 @@ fun ItemOrder(
                         Image(painter = painterResource(id = R.drawable.icon_b_minus),
                             contentDescription = null,
                             modifier = Modifier
+                                .size(21.dp)
                                 .clickable {
                                     if (value.value > 0) {
                                         value.value -= 1
                                     }
                                 })
-                        Spacer(modifier = Modifier.width(1.dp))
                         Surface(
                             shape = RoundedCornerShape(4.dp),
                             color = MaterialTheme.colors.surface.copy(0.3f),
                             elevation = 0.dp,
                             modifier = Modifier
-                                .size(15.dp)
+                                .size(17.dp)
 
                         ) {
                             Text(
@@ -100,6 +100,7 @@ fun ItemOrder(
                         Image(painter = painterResource(id = R.drawable.icon_b_plus),
                             contentDescription = null,
                             modifier = Modifier
+                                .size(18.dp)
                                 .clickable {
 
                                     value.value += 1
