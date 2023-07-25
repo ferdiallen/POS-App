@@ -38,7 +38,7 @@ fun MainView(
     }
 
     val showBottomBar = remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     showFloat.value = cart.value > 0

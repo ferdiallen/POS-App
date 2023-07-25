@@ -24,6 +24,8 @@ fun MenuContentGrid(
     namaMakanan: List<List<String>>,
     hargaMakanan: List<List<String>>,
     navController:NavController,
+    show:Boolean = true,
+    route:String = RouteApp.DetailProduk.route,
     clickListener:() -> Unit
 ) {
         Row(
@@ -40,7 +42,7 @@ fun MenuContentGrid(
                     modifier = Modifier
                         .width(150.dp),
                     onClick = {
-                        navController.navigate(RouteApp.DetailProduk.route)
+                        navController.navigate(route)
 
                     }
                 ) {
@@ -79,7 +81,9 @@ fun MenuContentGrid(
                                     fontSize = 8.sp
                                 )
                             }
-                            AddButton(clickListener)
+                            if (show) {
+                                AddButton(clickListener)
+                            }
                         }
                     }
                 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.posapp.widgets.general.TopBar
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 import com.example.posapp.widgets.detail_produk.AddRemove
 import com.example.posapp.widgets.detail_produk.DeskripsiProduk
 import com.example.posapp.widgets.general.AddButton
@@ -159,7 +160,9 @@ fun DetailProdukView(
                    .wrapContentHeight(Alignment.Bottom)
                    .padding(start = 18.dp, end = 18.dp)
            ) {
-               Button(onClick = {  },
+               Button(onClick = {
+
+               },
                    modifier = Modifier
                        .fillMaxWidth(),
                    shape = RoundedCornerShape(5.dp),

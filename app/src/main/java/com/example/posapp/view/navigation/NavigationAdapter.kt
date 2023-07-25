@@ -8,13 +8,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.posapp.utils.NavRoute
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.view.add_menu_produk.AddMenuProdukView
+import com.example.posapp.view.data_pembelian.DataPembelianView
+import com.example.posapp.view.data_penjualan.DataPenjualan
 import com.example.posapp.view.detail_order.DetailOrderView
 import com.example.posapp.view.detail_produk.DetailProdukView
 import com.example.posapp.view.home.HomeView
+import com.example.posapp.view.input_pembelian.InputPembelian
+import com.example.posapp.view.login.LoginView
+import com.example.posapp.view.manage_produk.ManageProdukView
 import com.example.posapp.view.menu.MenuView
 import com.example.posapp.view.order.OrderView
 import com.example.posapp.view.pesan_sukses.PesananSuksesView
 import com.example.posapp.view.profile.Profile
+import com.example.posapp.view.register.RegisterView
 import com.example.posapp.view.transaksi.TransaksiOrder
 
 @Composable
@@ -23,7 +30,18 @@ fun NavigationAdapter(navController: NavHostController,
                       cart:MutableState<Int>,
                       cetak:() -> Unit,
                       addButton:() -> Unit) {
-    NavHost(navController = navController, startDestination = NavRoute.Home.route ) {
+    NavHost(navController = navController, startDestination = RouteApp.Login.route ) {
+
+        composable(RouteApp.Login.route) {
+            showBottomBar.value = false
+            LoginView(navController = navController)
+        }
+
+        composable(RouteApp.Register.route) {
+            showBottomBar.value = false
+            RegisterView(navController = navController)
+        }
+
         composable(NavRoute.Home.route) {
             showBottomBar.value = true
             HomeView(navController = navController) {
@@ -42,7 +60,7 @@ fun NavigationAdapter(navController: NavHostController,
         }
         composable(NavRoute.Profile.route) {
             showBottomBar.value = true
-            Profile()
+            Profile(navController)
         }
 
         composable(RouteApp.Pesanan.route) {
@@ -66,6 +84,37 @@ fun NavigationAdapter(navController: NavHostController,
             PesananSuksesView() {
                 cetak.invoke()
             }
+        }
+
+        composable(RouteApp.DataPenjualan.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            DataPenjualan(navController = navController)
+        }
+
+        composable(RouteApp.DataPembelian.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            DataPembelianView(navController = navController)
+        }
+
+        composable(RouteApp.InputPembelian.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            InputPembelian(navController = navController)
+        }
+        composable(RouteApp.AddMenu.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            AddMenuProdukView(navController = navController) {
+
+            }
+        }
+
+        composable(RouteApp.AddFormMenu.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            ManageProdukView(navController = navController)
         }
     }
 }

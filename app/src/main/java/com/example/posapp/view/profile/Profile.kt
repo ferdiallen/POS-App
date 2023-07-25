@@ -15,11 +15,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Profile () {
+fun Profile (
+    navController: NavController
+) {
 
     val state = rememberScrollState()
 
@@ -135,7 +139,9 @@ fun Profile () {
                             }
                         }
                         Spacer(modifier = Modifier.height(20.dp))
-                        Surface(onClick = {  },
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.AddMenu.route)
+                        },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
@@ -156,7 +162,9 @@ fun Profile () {
                             }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        Surface(onClick = {  },
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.DataPenjualan.route)
+                        },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
@@ -177,7 +185,9 @@ fun Profile () {
                             }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        Surface(onClick = {  },
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.DataPembelian.route)
+                        },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
