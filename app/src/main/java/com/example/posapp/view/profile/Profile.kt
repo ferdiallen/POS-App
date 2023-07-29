@@ -95,9 +95,44 @@ fun Profile (
                 ) {
                     Column(
                         Modifier
+                            .padding(top = 4.dp, bottom = 4.dp, start = 18.dp, end = 16.dp)
+                    ) {
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.SetAktif.route)
+                        },
+                            color = Color.Transparent,
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .padding(6.dp)
+                            ) {
+                                Icon(painter = painterResource(id = R.drawable.set_aktif),
+                                    contentDescription = null )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = "Set Kasir Aktif",
+                                    style = MaterialTheme.typography.body2,
+                                    fontSize = 12.sp,
+                                    color = MaterialTheme.colors.surface)
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Surface(Modifier
+                    .fillMaxWidth(),
+                    shape = RoundedCornerShape(15.dp),
+                    elevation = 8.dp,
+                    color = MaterialTheme.colors.background
+                ) {
+                    Column(
+                        Modifier
                             .padding(top = 16.dp, bottom = 16.dp, start = 18.dp, end = 16.dp)
                     ) {
-                        Surface(onClick = {  },
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.EditProfile.route)
+                        },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
@@ -118,7 +153,9 @@ fun Profile (
                             }
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        Surface(onClick = {  },
+                        Surface(onClick = {
+                                          navController.navigate(RouteApp.GantiPassword.route)
+                        },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
@@ -240,7 +277,7 @@ fun Profile (
                 ) {
                     Column(
                         Modifier
-                            .padding(top = 16.dp, bottom = 16.dp, start = 18.dp, end = 16.dp)
+                            .padding(top = 4.dp, bottom = 4.dp, start = 18.dp, end = 16.dp)
                     ) {
                         Surface(onClick = {  },
                             color = Color.Transparent,

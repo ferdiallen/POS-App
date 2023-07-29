@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -23,8 +24,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +40,76 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PickRoundedPhoto(
+    uriImage:MutableState<Uri?>
+) {
+    val context = LocalContext.current
+    val bitmap = remember {
+        mutableStateOf<Bitmap?>( null)
+    }
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+        onResult = {
+                uri: Uri? ->
+            uriImage.value = uri
+        } )
+
+    uriImage.value?.let {
+        if (Build.VERSION.SDK_INT < 28) {
+            bitmap.value = MediaStore.Images
+                .Media.getBitmap(context.contentResolver,it)
+        } else {
+            val source = ImageDecoder
+                .createSource(context.contentResolver,it)
+            bitmap.value = ImageDecoder.decodeBitmap(source)
+        }
+
+        val file = File(getRealPathFromURI(it,context))
+        if (file.exists()) {
+            Log.d("FILE EXIST BOSS",file.toString())
+        } else {
+            Log.d("GAK EKSIS","GAK BLAS")
+        }
+    }
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentWidth(CenterHorizontally)
+        .padding(start = 18.dp, end = 18.dp)) {
+        Surface(
+            color = Color.Transparent,
+            shape = RoundedCornerShape(6.dp),
+            onClick = {
+                launcher.launch("image/*")
+            }
+        ) {
+            Column {
+                Surface(
+                    shape = CircleShape,
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(80.dp)
+                ) {
+                    if (bitmap.value == null) {
+                        Image(painter = painterResource(id = R.drawable.profile_male ),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop)
+                    } else {
+                        Image(bitmap = bitmap.value!!.asImageBitmap(),
+                            contentDescription =  null,
+                            contentScale = ContentScale.Crop)
+                    }
+                }
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(text = "Ganti Foto Profile",
+                    color = Color(0xFF162CA2),
+                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.body1)
+            }
+        }
+    }
+}
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PickPhotoByGalery(

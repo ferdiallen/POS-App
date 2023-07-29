@@ -1,6 +1,9 @@
 package com.example.posapp.utils
 
 sealed class RouteApp(val route:String) {
+    object SetAktif:RouteApp("set_aktif")
+    object EditProfile:RouteApp("editt_profile")
+    object GantiPassword:RouteApp("ganti_password")
     object AddFormMenu:RouteApp("add_form_menu")
     object AddMenu:RouteApp("add_menu")
     object InputPembelian:RouteApp("input_pembelian")

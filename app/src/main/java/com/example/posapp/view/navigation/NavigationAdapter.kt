@@ -13,8 +13,11 @@ import com.example.posapp.view.data_pembelian.DataPembelianView
 import com.example.posapp.view.data_penjualan.DataPenjualan
 import com.example.posapp.view.detail_order.DetailOrderView
 import com.example.posapp.view.detail_produk.DetailProdukView
+import com.example.posapp.view.edit_profile.EditProfileView
+import com.example.posapp.view.ganti_password.GantiPassword
 import com.example.posapp.view.home.HomeView
 import com.example.posapp.view.input_pembelian.InputPembelian
+import com.example.posapp.view.kasir.KasirView
 import com.example.posapp.view.login.LoginView
 import com.example.posapp.view.manage_produk.ManageProdukView
 import com.example.posapp.view.menu.MenuView
@@ -115,6 +118,23 @@ fun NavigationAdapter(navController: NavHostController,
             cart.value = 0
             showBottomBar.value = false
             ManageProdukView(navController = navController)
+        }
+
+        composable(RouteApp.GantiPassword.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            GantiPassword(navController = navController)
+        }
+        composable(RouteApp.EditProfile.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            EditProfileView(navController = navController)
+        }
+
+        composable(RouteApp.SetAktif.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            KasirView(navController = navController)
         }
     }
 }
