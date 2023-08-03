@@ -28,12 +28,14 @@ import com.example.posapp.view.register.RegisterView
 import com.example.posapp.view.transaksi.TransaksiOrder
 
 @Composable
-fun NavigationAdapter(navController: NavHostController,
-                      showBottomBar:MutableState<Boolean>,
-                      cart:MutableState<Int>,
-                      cetak:() -> Unit,
-                      addButton:() -> Unit) {
-    NavHost(navController = navController, startDestination = RouteApp.Login.route ) {
+fun NavigationAdapter(
+    navController: NavHostController,
+    showBottomBar: MutableState<Boolean>,
+    cart: MutableState<Int>,
+    cetak: () -> Unit,
+    addButton: () -> Unit
+) {
+    NavHost(navController = navController, startDestination = RouteApp.Login.route) {
 
         composable(RouteApp.Login.route) {
             showBottomBar.value = false
@@ -70,7 +72,7 @@ fun NavigationAdapter(navController: NavHostController,
             showBottomBar.value = false
             OrderView(navController = navController)
         }
-        
+
         composable(RouteApp.DetailOrder.route) {
             showBottomBar.value = false
             DetailOrderView(navController = navController)

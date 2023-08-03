@@ -32,36 +32,32 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bluetoothPermissions =
-            // Checks if the device has Android 12 or above
-
         setContent {
             val bluetoothPermissions =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 rememberMultiplePermissionsState(
                     permissions = listOf(
                         android.Manifest.permission.BLUETOOTH,
-                        android.Manifest.permission.BLUETOOTH_ADMIN,
-                        android.Manifest.permission.BLUETOOTH_CONNECT,
-                        android.Manifest.permission.BLUETOOTH_SCAN,
-                    )
+                        android.Manifest.permission.BLUETOOTH_ADMIN
+                    ).apply {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            toMutableList().addAll(
+                                listOf(
+                                    android.Manifest.permission.BLUETOOTH_CONNECT,
+                                    android.Manifest.permission.BLUETOOTH_SCAN,
+                                )
+                            )
+                        }
+                    }
                 )
-            } else {
-                rememberMultiplePermissionsState(
-                    permissions = listOf(
-                        android.Manifest.permission.BLUETOOTH,
-                        android.Manifest.permission.BLUETOOTH_ADMIN,
-                    )
-                )
-            }
-
             POSAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val printer = BluetoothPrint(this)
+                    val printer = remember {
+                        BluetoothPrint(this)
+                    }
 
                     val enableBluetoothContract = rememberLauncherForActivityResult(
                         ActivityResultContracts.StartActivityForResult()
@@ -74,7 +70,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    val enableBluetoothIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    val enableBluetoothIntent = remember {
+                        Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    }
 
                     val bluetoothManager = remember {
                         this.getSystemService(BluetoothManager::class.java)
@@ -93,14 +91,14 @@ class MainActivity : ComponentActivity() {
                                 enableBluetoothContract.launch(enableBluetoothIntent)
                             }
                         } else {
-                            Log.e("Error","Print ERROR")
+                            Log.e("Error", "Print ERROR")
                         }
-                    }
                     }
                 }
             }
         }
     }
+}
 
 
 @Composable

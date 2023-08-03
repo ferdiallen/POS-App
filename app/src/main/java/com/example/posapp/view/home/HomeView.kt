@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
@@ -22,6 +23,7 @@ fun HomeView(
     navController: NavController,
     addButton: () -> Unit
 ) {
+    val viewModel:HomeViewModel = hiltViewModel()
     val search = remember {
         mutableStateOf("")
     }
@@ -103,7 +105,7 @@ fun HomeView(
                 Modifier
                     .padding(start = 18.dp, end = 18.dp, top = 8.dp, bottom = 8.dp)
             ) {
-                HeaderHome()
+                HeaderHome(viewModel.currentUserData)
                 Spacer(modifier = Modifier.height(24.dp))
                 SearchBar(search)
                 Spacer(modifier = Modifier.height(12.dp))

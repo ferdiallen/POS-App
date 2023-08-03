@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1026946805181",
+    "firebase_url": "https://projectpos-646db-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "projectpos-646db",
+    "storage_bucket": "projectpos-646db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026946805181:android:51b911e9d1d995f8fbf6d4",
+        "android_client_info": {
+          "package_name": "com.example.posapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026946805181-g2ejdvk5e2srs8g4jeelovcjjj7bfqj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtzCZKULyG8QPdhfaUsgaegWmnh80zovs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026946805181-g2ejdvk5e2srs8g4jeelovcjjj7bfqj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
