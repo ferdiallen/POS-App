@@ -12,5 +12,5 @@ data class ProductEntity(
     val harga: Int = 0,
     val deskripsi: String = "",
     val kategori: String = "",
-    val fotoProduk: Uri?
+    val fotoProduk: String
 )

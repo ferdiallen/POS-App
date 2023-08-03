@@ -1,14 +1,21 @@
 package com.example.posapp.view.manage_produk
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -16,8 +23,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.data.ProductEntity
+import com.example.posapp.utils.CategoryProduct
 import com.example.posapp.utils.RouteApp
 import com.example.posapp.utils.moneyFormatter
 import com.example.posapp.widgets.general.ElevationTextField
@@ -25,11 +35,16 @@ import com.example.posapp.widgets.general.TopBar
 import com.example.posapp.widgets.manager_produk.PickPhotoByGalery
 import java.text.DecimalFormat
 
+private val dropdownMenuList = listOf(
+    CategoryProduct.MAKANAN, CategoryProduct.MINUMAN
+)
+
 @Composable
 fun ManageProdukView(
     navController: NavController
 ) {
-
+    val viewModel: AddProductViewModel = hiltViewModel()
+    val context = LocalContext.current
     val namaProduk = remember {
         mutableStateOf(TextFieldValue(""))
     }
@@ -40,18 +55,38 @@ fun ManageProdukView(
         mutableStateOf(TextFieldValue(""))
     }
     val kategoriProduk = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf("")
     }
     val imageByUri = remember {
         mutableStateOf<Uri?>(null)
+    }
+    var shouldShowDropdownMenu by remember {
+        mutableStateOf(false)
     }
     val formatter = DecimalFormat("#,###")
     Box {
         Scaffold(
             bottomBar = {
-                Box(modifier = Modifier
-                    .padding(start = 18.dp,end = 18.dp, bottom = 18.dp)) {
-                    Button(onClick = { navController.navigate(RouteApp.AddFormMenu.route) },
+                Box(
+                    modifier = Modifier
+                        .padding(start = 18.dp, end = 18.dp, bottom = 18.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            viewModel.saveProduct(
+                                ProductEntity(
+                                    namaProduk = namaProduk.value.text,
+                                    harga = hargaProduk.value.text.replace(",", "")
+                                        .toInt(),
+                                    deskripsi = deskripsiProduk.value.text,
+                                    kategori = kategoriProduk.value,
+                                    fotoProduk = viewModel.saveImageToStorage(
+                                        context = context,
+                                        imageByUri.value ?: return@Button
+                                    )
+                                )
+                            )
+                        },
                         modifier = Modifier
                             .fillMaxWidth(),
                         shape = RoundedCornerShape(5.dp),
@@ -59,11 +94,14 @@ fun ManageProdukView(
                             backgroundColor = MaterialTheme.colors.primary
                         )
                     ) {
-                        Icon(painter = painterResource(id = R.drawable.add_rounded),
+                        Icon(
+                            painter = painterResource(id = R.drawable.add_rounded),
                             contentDescription = null,
-                            tint = MaterialTheme.colors.onSurface)
+                            tint = MaterialTheme.colors.onSurface
+                        )
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(text = "Simpan",
+                        Text(
+                            text = "Simpan",
                             style = MaterialTheme.typography.body2,
                             color = MaterialTheme.colors.onSurface,
                             fontSize = 14.sp,
@@ -104,27 +142,37 @@ fun ManageProdukView(
                                 .padding(top = 10.dp, bottom = 10.dp)
                         ) {
 
-                            Box(modifier = Modifier
-                                .padding(start = 12.dp, end = 12.dp)) {
-                                Text(text = "Details Produk",
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 12.dp, end = 12.dp)
+                            ) {
+                                Text(
+                                    text = "Details Produk",
                                     style = MaterialTheme.typography.h3,
                                     color = MaterialTheme.colors.surface,
-                                    fontSize = 14.sp)
+                                    fontSize = 14.sp
+                                )
                             }
                             Spacer(modifier = Modifier.height(6.dp))
-                            Box(modifier = Modifier
-                                .padding(start = 12.dp, end = 12.dp)) {
-                                Text(text = "Nama Produk",
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 12.dp, end = 12.dp)
+                            ) {
+                                Text(
+                                    text = "Nama Produk",
                                     style = MaterialTheme.typography.body1,
                                     color = MaterialTheme.colors.surface,
-                                    fontSize = 10.sp)
+                                    fontSize = 10.sp
+                                )
                             }
-                            ElevationTextField(string = namaProduk.value ,
+                            ElevationTextField(
+                                string = namaProduk.value,
                                 mutable = {
                                     namaProduk.value = it
                                 },
                                 modifier = Modifier
-                                    .fillMaxWidth())
+                                    .fillMaxWidth()
+                            )
                             Spacer(modifier = Modifier.height(10.dp))
                             Box(
                                 modifier = Modifier
@@ -167,12 +215,12 @@ fun ManageProdukView(
                                         val stripped = it.text.filter { it.isDigit() || it == '.' }
                                         val parsed = stripped.toDoubleOrNull()
                                         if (parsed != null) {
-                                            hargaProduk.value  = it.copy(
+                                            hargaProduk.value = it.copy(
                                                 text = moneyFormatter().format(parsed),
                                                 selection = TextRange(moneyFormatter().format(parsed).length)
                                             )
                                         } else {
-                                            hargaProduk.value  = it.copy(
+                                            hargaProduk.value = it.copy(
                                                 ""
                                             )
                                         }
@@ -202,6 +250,55 @@ fun ManageProdukView(
                                 modifier = Modifier
                                     .fillMaxWidth()
                             )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Box(
+                                modifier = Modifier
+                                    .padding(start = 18.dp, end = 18.dp)
+                            ) {
+                                Text(
+                                    text = "Kategori Produk",
+                                    style = MaterialTheme.typography.body1,
+                                    color = MaterialTheme.colors.surface,
+                                    fontSize = 10.sp
+                                )
+                            }
+                            Column(horizontalAlignment = Alignment.End) {
+                                ElevationTextField(
+                                    string = TextFieldValue(text = kategoriProduk.value),
+                                    mutable = {
+
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+
+                                        }, trailingIcon = {
+                                        IconButton(onClick = {
+                                            shouldShowDropdownMenu = !shouldShowDropdownMenu
+                                        }) {
+                                            Icon(
+                                                imageVector = Icons.Filled.KeyboardArrowDown,
+                                                contentDescription = "",
+                                                tint = Color.Black
+                                            )
+                                        }
+                                    }
+                                )
+                                DropdownMenu(expanded = shouldShowDropdownMenu,
+                                    onDismissRequest = {
+                                        shouldShowDropdownMenu = false
+                                    },modifier = Modifier.fillMaxWidth()) {
+                                    dropdownMenuList.forEach {
+                                        DropdownMenuItem(onClick = {
+                                            kategoriProduk.value = it.name
+                                            shouldShowDropdownMenu = false
+                                        }) {
+                                            Text(text = it.name)
+                                        }
+                                    }
+                                }
+
+                            }
                             Spacer(modifier = Modifier.height(10.dp))
 //                            KATEGORI PRODUK
                             Box(

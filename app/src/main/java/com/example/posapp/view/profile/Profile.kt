@@ -337,7 +337,7 @@ fun Profile(
                             onClick = {
                                 viewModel.signOutUser {
                                     navController.navigate(RouteApp.Login.route) {
-                                        popUpTo(RouteApp.Login.route){
+                                        popUpTo(NavRoute.Home.route){
                                             inclusive = true
                                         }
                                     }

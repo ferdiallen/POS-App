@@ -15,19 +15,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.CategoryProduct
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.view.manage_produk.AddProductViewModel
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AddMenuProdukView(
-    navController:NavController,
+    navController: NavController,
     addButton: () -> Unit
 ) {
-
+    val viewModel: AddMenuProductViewModel = hiltViewModel()
+    val productList by viewModel.productState.collectAsState(initial = emptyList())
+    val makanan = remember(productList) {
+        productList.filter {
+            it.kategori == CategoryProduct.MAKANAN.name
+        }
+    }
+    val minuman = remember(productList) {
+        productList.filter {
+            it.kategori == CategoryProduct.MINUMAN.name
+        }
+    }
     val category = listOf(
         "Makanan",
         "Minuman"
@@ -106,11 +120,14 @@ fun AddMenuProdukView(
 
         )
 
-    Scaffold (
+    Scaffold(
         bottomBar = {
-            Box(modifier = Modifier
-                .padding(start = 18.dp,end = 18.dp)) {
-                Button(onClick = { navController.navigate(RouteApp.AddFormMenu.route) },
+            Box(
+                modifier = Modifier
+                    .padding(start = 18.dp, end = 18.dp)
+            ) {
+                Button(
+                    onClick = { navController.navigate(RouteApp.AddFormMenu.route) },
                     modifier = Modifier
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(5.dp),
@@ -118,11 +135,14 @@ fun AddMenuProdukView(
                         backgroundColor = MaterialTheme.colors.primary
                     )
                 ) {
-                    Icon(painter = painterResource(id = R.drawable.add_rounded),
+                    Icon(
+                        painter = painterResource(id = R.drawable.add_rounded),
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onSurface)
+                        tint = MaterialTheme.colors.onSurface
+                    )
                     Spacer(modifier = Modifier.height(2.dp))
-                    Text(text = "Tambah Produk",
+                    Text(
+                        text = "Tambah Produk",
                         style = MaterialTheme.typography.body2,
                         color = MaterialTheme.colors.onSurface,
                         fontSize = 14.sp,
@@ -131,7 +151,7 @@ fun AddMenuProdukView(
                 }
             }
         }
-            ) {
+    ) {
         Surface(
             color = MaterialTheme.colors.background,
             modifier = Modifier
@@ -184,37 +204,48 @@ fun AddMenuProdukView(
                     currentIndex.value = it
                     when (it) {
                         0 -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
                                 content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController,
-                                            false,
-                                        ) {
-//                                            addButton.invoke()
-                                        }
+                                    itemsIndexed(makanan) { index, item ->
+                                        /* MenuContentGrid(
+                                             productList,
+                                             fotoMakanan = fotoMakanan,
+                                             index = index,
+                                             namaMakanan = namaMakanan,
+                                             hargaMakanan = hargaMakanan,
+                                             navController,
+                                             false,
+                                         ) {
+ //                                            addButton.invoke()
+                                         }*/
+                                        MenuContentGrid(data = item, navigate = {
+                                            navController.navigate(RouteApp.DetailProduk.route)
+                                        })
 
                                     }
                                 })
                         }
-                        else -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
-                                content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController,
-                                            false
-                                        ) {
 
-                                        }
+                        else -> {
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                content = {
+                                    itemsIndexed(minuman) { index, item ->
+                                        /* MenuContentGrid(
+                                             productList,
+                                             fotoMakanan = fotoMakanan,
+                                             index = index,
+                                             namaMakanan = namaMakanan,
+                                             hargaMakanan = hargaMakanan,
+                                             navController,
+                                             false,
+                                         ) {
+    //                                            addButton.invoke()
+                                         }*/
+                                        MenuContentGrid(data = item, navigate = {
+                                            navController.navigate(RouteApp.DetailProduk.route)
+                                        })
 
                                     }
                                 })
