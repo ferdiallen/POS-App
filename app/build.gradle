@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -89,6 +90,12 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    //Room
+    def room_ver = "2.5.2"
+    implementation "androidx.room:room-runtime:$room_ver"
+    implementation "androidx.room:room-ktx:$room_ver"
+    ksp "androidx.room:room-compiler:$room_ver"
 }
 
 kapt {
