@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -20,18 +21,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.posapp.ui.theme.POSAppTheme
-import com.example.posapp.utils.BluetoothPrint
 import com.example.posapp.view.MainView
 import com.example.posapp.view.home.HomeView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.mazenrashed.printooth.Printooth
+import com.mazenrashed.printooth.data.printable.Printable
+import com.mazenrashed.printooth.data.printable.RawPrintable
+import com.mazenrashed.printooth.data.printable.TextPrintable
+import com.mazenrashed.printooth.data.printer.DefaultPrinter
+import com.mazenrashed.printooth.ui.ScanningActivity
+import com.mazenrashed.printooth.utilities.Printing
+import com.mazenrashed.printooth.utilities.PrintingCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private var printing: Printing? = null
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Printooth.hasPairedPrinter()) {
+            printing = Printooth.printer()
+        }
+
         setContent {
             val bluetoothPermissions =
                 rememberMultiplePermissionsState(
@@ -55,16 +70,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val printer = remember {
-                        BluetoothPrint(this)
-                    }
 
                     val enableBluetoothContract = rememberLauncherForActivityResult(
                         ActivityResultContracts.StartActivityForResult()
                     ) {
                         if (it.resultCode == Activity.RESULT_OK) {
                             Log.d("bluetoothLauncher", "Success")
-                            printer.print()
+                            initListeners()
                         } else {
                             Log.w("bluetoothLauncher", "Failed")
                         }
@@ -85,7 +97,7 @@ class MainActivity : ComponentActivity() {
                         if (bluetoothPermissions.allPermissionsGranted) {
                             if (bluetoothAdapter?.isEnabled == true) {
                                 // Bluetooth is on print the receipt
-                                printer.print()
+                                initListeners()
                             } else {
                                 // Bluetooth is off, ask user to turn it on
                                 enableBluetoothContract.launch(enableBluetoothIntent)
@@ -98,6 +110,113 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    private fun initListeners() {
+        if (!Printooth.hasPairedPrinter())
+            resultLauncher.launch(
+                Intent(
+                    this@MainActivity,
+                    ScanningActivity::class.java
+                )
+            )
+        else printDetails()
+
+
+        /* callback from printooth to get printer process */
+        printing?.printingCallback = object : PrintingCallback {
+            override fun connectingWithPrinter() {
+                Toast.makeText(this@MainActivity, "Connecting with printer", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun printingOrderSentSuccessfully() {
+                Toast.makeText(this@MainActivity, "Order sent to printer", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun connectionFailed(error: String) {
+                Toast.makeText(this@MainActivity, "Failed to connect printer", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            override fun onError(error: String) {
+                Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onMessage(message: String) {
+                Toast.makeText(this@MainActivity, "Message: $message", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun disconnected() {
+                Toast.makeText(this@MainActivity, "Disconnected Printer", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    private fun printDetails() {
+        val printables = getSomePrintables()
+        printing?.print(printables)
+    }
+
+    /* Customize your printer here with text, logo and QR code */
+    private fun getSomePrintables() = ArrayList<Printable>().apply {
+
+        add(RawPrintable.Builder(byteArrayOf(27, 100, 4)).build()) // feed lines example in raw mode
+
+
+        //logo
+//            add(ImagePrintable.Builder(R.drawable.bold, resources)
+//                    .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
+//                    .build())
+
+
+        add(
+            TextPrintable.Builder()
+                .setText("Printer")
+                .setLineSpacing(DefaultPrinter.LINE_SPACING_60)
+                .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
+                .setFontSize(DefaultPrinter.FONT_SIZE_LARGE)
+                .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                .setNewLinesAfter(1)
+                .build()
+        )
+
+
+        add(
+            TextPrintable.Builder()
+                .setText("TID: 1111123322")
+                .setCharacterCode(DefaultPrinter.CHARCODE_PC1252)
+                .setNewLinesAfter(1)
+                .build()
+        )
+
+
+        add(
+            TextPrintable.Builder()
+                .setText("Hello World")
+                .setAlignment(DefaultPrinter.ALIGNMENT_RIGHT)
+                .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                .setUnderlined(DefaultPrinter.UNDERLINED_MODE_ON)
+                .setNewLinesAfter(1)
+                .build()
+        )
+
+        add(RawPrintable.Builder(byteArrayOf(27, 100, 4)).build())
+
+    }
+
+
+    /* Inbuilt activity to pair device with printer or select from list of pair bluetooth devices */
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == ScanningActivity.SCANNING_FOR_PRINTER && result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+//            val intent = result.data
+                printDetails()
+            }
+        }
+
 }
 
 
