@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
 
         if (Printooth.hasPairedPrinter()) {
             printing = Printooth.printer()
+
         }
 
         setContent {
