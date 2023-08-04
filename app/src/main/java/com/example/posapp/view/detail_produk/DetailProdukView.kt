@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.posapp.widgets.general.TopBar
 import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
@@ -28,7 +29,11 @@ import com.example.posapp.widgets.general.AddButton
 
 @Composable
 fun DetailProdukView(
-    navController: NavController
+    navController: NavController  ,
+    productName: String = "",
+    productImage: String = "",
+    productDesc: String = "",
+    price: Int = 0
 ) {
 
     val value = remember {
@@ -85,8 +90,8 @@ fun DetailProdukView(
                                .height(170.dp),
                            color = Color.Transparent
                        ) {
-                           Image(
-                               painter = painterResource(id = R.drawable.ayam_hd),
+                           AsyncImage(
+                               model = productImage,
                                contentDescription = null,
                                contentScale = ContentScale.Crop
                            )
@@ -120,11 +125,11 @@ fun DetailProdukView(
                                        horizontalArrangement = Arrangement.SpaceBetween
                                    ) {
                                        Column {
-                                           Text(text = "Ayam Goreng",
+                                           Text(text = productName,
                                                style = MaterialTheme.typography.h1,
                                                color = MaterialTheme.colors.surface,
                                                fontSize = 14.sp)
-                                           Text(text = "Rp. 13.000",
+                                           Text(text = price.toString(),
                                                color = MaterialTheme.colors.secondary,
                                                style = MaterialTheme.typography.body2,
                                                fontSize = 14.sp)
@@ -132,7 +137,9 @@ fun DetailProdukView(
                                        AddRemove(value)
                                    }
                                    Spacer(modifier = Modifier.height(14.dp))
-                                   DeskripsiProduk()
+                                   DeskripsiProduk(
+                                       productDesc
+                                   )
                                    Spacer(modifier = Modifier.height(14.dp))
                                    Text(text = "Rekomendasi",
                                        style = MaterialTheme.typography.h1,

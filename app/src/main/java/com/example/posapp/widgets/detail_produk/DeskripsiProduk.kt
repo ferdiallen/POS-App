@@ -11,7 +11,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DeskripsiProduk() {
+fun DeskripsiProduk(
+    deskripsi:String
+) {
     Text(
         text = "Deskripsi Produk",
         style = MaterialTheme.typography.h1,
@@ -20,7 +22,7 @@ fun DeskripsiProduk() {
     )
     Spacer(modifier = Modifier.height(2.dp))
     Text(
-        text = "Ini merupakan ayam goreng yang enak banget tau, cobain deh ! Ayam Goreng Gurih: Rasakan kenikmatan ayam goreng berkualitas tinggi dalam setiap gigitan!",
+        text = deskripsi,
         textAlign = TextAlign.Justify,
         style = MaterialTheme.typography.body2,
         color = MaterialTheme.colors.surface,

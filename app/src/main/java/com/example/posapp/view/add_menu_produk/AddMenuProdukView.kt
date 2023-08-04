@@ -23,6 +23,8 @@ import com.example.posapp.utils.RouteApp
 import com.example.posapp.view.manage_produk.AddProductViewModel
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -221,7 +223,9 @@ fun AddMenuProdukView(
  //                                            addButton.invoke()
                                          }*/
                                         MenuContentGrid(data = item, navigate = {
-                                            navController.navigate(RouteApp.DetailProduk.route)
+                                            val encodedUrl = URLEncoder.encode(item.fotoProduk,StandardCharsets.UTF_8.toString())
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
+
                                         })
 
                                     }
@@ -244,7 +248,7 @@ fun AddMenuProdukView(
     //                                            addButton.invoke()
                                          }*/
                                         MenuContentGrid(data = item, navigate = {
-                                            navController.navigate(RouteApp.DetailProduk.route)
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${item.fotoProduk}/${item.deskripsi}/${item.harga}")
                                         })
 
                                     }

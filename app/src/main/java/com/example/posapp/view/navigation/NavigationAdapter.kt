@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.posapp.utils.NavRoute
 import com.example.posapp.utils.RouteApp
 import com.example.posapp.view.add_menu_produk.AddMenuProdukView
@@ -73,15 +75,31 @@ fun NavigationAdapter(
             OrderView(navController = navController)
         }
 
-        composable(RouteApp.DetailOrder.route) {
+        composable(
+            RouteApp.DetailOrder.route
+        ) {
             showBottomBar.value = false
             DetailOrderView(navController = navController)
         }
 
-        composable(RouteApp.DetailProduk.route) {
+        composable(RouteApp.DetailProduk.route+"/{name}/{photo}/{detail}/{price}", arguments = listOf(
+            navArgument("name"){
+                type = NavType.StringType
+            },navArgument("photo"){
+                type = NavType.StringType
+            },navArgument("detail"){
+                type = NavType.StringType
+            },navArgument("price"){
+                type = NavType.IntType
+            },
+        )) {
+            val name = it.arguments?.getString("name")
+            val photo = it.arguments?.getString("photo")
+            val detail = it.arguments?.getString("detail")
+            val price = it.arguments?.getInt("price")
             cart.value = 0
             showBottomBar.value = false
-            DetailProdukView(navController = navController)
+            DetailProdukView(navController = navController,name?:"",photo?:"",detail?:"",price?:0)
         }
 
         composable(RouteApp.PesananSukses.route) {
