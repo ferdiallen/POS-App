@@ -28,6 +28,7 @@ fun DatePicker(
     dateValue: MutableState<String>,
     showDialog: MutableState<Boolean>,
     context: Context,
+    text:String = "Pilih Tanggal",
     onDismiss: () -> Unit
 ) {
     val calendar = Calendar.getInstance()
@@ -57,7 +58,7 @@ fun DatePicker(
 
     Column {
         Text(
-            text = "Pilih Tanggal",
+            text = text,
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.surface,
             fontSize = 12.sp,

@@ -31,8 +31,6 @@ fun MainView(
     val checkoutViewModel: CheckoutViewModel = hiltViewModel()
     val uiState = checkoutViewModel.uiState.collectAsState().value
 
-
-
     val cart = remember {
         mutableStateOf(0)
     }
@@ -45,7 +43,8 @@ fun MainView(
     }
 
     showFloat.value = uiState.isNotEmpty()
-
+    Log.d("INI ISINYA", uiState.toString())
+    cart.value = uiState.size
     Box {
         Scaffold(
             Modifier

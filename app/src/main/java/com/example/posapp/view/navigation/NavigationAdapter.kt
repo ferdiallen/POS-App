@@ -27,6 +27,7 @@ import com.example.posapp.view.order.OrderView
 import com.example.posapp.view.pesan_sukses.PesananSuksesView
 import com.example.posapp.view.profile.Profile
 import com.example.posapp.view.register.RegisterView
+import com.example.posapp.view.rekap_laporan.RekapLaporan
 import com.example.posapp.view.transaksi.TransaksiOrder
 
 @Composable
@@ -155,6 +156,12 @@ fun NavigationAdapter(
             cart.value = 0
             showBottomBar.value = false
             KasirView(navController = navController)
+        }
+
+        composable(RouteApp.RekapLaporan.route) {
+            cart.value = 0
+            showBottomBar.value = false
+            RekapLaporan(navController = navController)
         }
     }
 }

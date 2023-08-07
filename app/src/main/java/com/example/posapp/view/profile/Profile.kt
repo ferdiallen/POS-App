@@ -294,7 +294,9 @@ fun Profile(
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                         Surface(
-                            onClick = { },
+                            onClick = {
+                                      navController.navigate(RouteApp.RekapLaporan.route)
+                            },
                             color = Color.Transparent,
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
