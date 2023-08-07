@@ -5,10 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -17,11 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.posapp.view.navbar.BotNavigation
 import com.example.posapp.view.navigation.NavigationAdapter
 import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.viewmodels.CheckoutViewModel
 
 @Composable
 fun MainView(
@@ -29,6 +28,10 @@ fun MainView(
 ) {
 
     val navController = rememberNavController()
+    val checkoutViewModel: CheckoutViewModel = hiltViewModel()
+    val uiState = checkoutViewModel.uiState.collectAsState().value
+
+
 
     val cart = remember {
         mutableStateOf(0)
@@ -41,7 +44,7 @@ fun MainView(
         mutableStateOf(false)
     }
 
-    showFloat.value = cart.value > 0
+    showFloat.value = uiState.isNotEmpty()
 
     Box {
         Scaffold(

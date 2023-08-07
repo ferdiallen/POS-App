@@ -17,4 +17,5 @@ interface ProductDao {
 
     @Delete
     suspend fun deleteProduct(data: ProductEntity)
+
 }

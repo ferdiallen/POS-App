@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.data.CheckoutModel
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.viewmodels.CheckoutViewModel
 import com.example.posapp.widgets.home.HeaderHome
 import com.example.posapp.widgets.home.SearchBar
 import com.example.posapp.widgets.general.MenuContent
@@ -23,7 +25,10 @@ fun HomeView(
     navController: NavController,
     addButton: () -> Unit
 ) {
-    val viewModel:HomeViewModel = hiltViewModel()
+    val viewModel: HomeViewModel = hiltViewModel()
+    val checkoutViewModel: CheckoutViewModel = hiltViewModel()
+
+
     val search = remember {
         mutableStateOf("")
     }
@@ -112,7 +117,20 @@ fun HomeView(
                 LazyColumn(
                     content = {
                         itemsIndexed(rekomendasi) { index, item ->
-                            MenuContent(navController,item, fotoMakanan, index, namaMakanan, hargaMakanan) {
+                            MenuContent(
+                                navController,
+                                item,
+                                fotoMakanan,
+                                index,
+                                namaMakanan,
+                                hargaMakanan
+                            ) {
+                                checkoutViewModel.insertCheckout(CheckoutModel(
+                                    name = namaMakanan[0][index],
+                                    price = 5000,
+                                    image = fotoMakanan[0][index].toString()
+
+                                ))
                                 addButton.invoke()
                             }
                             Spacer(modifier = Modifier.height(12.dp))
