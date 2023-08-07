@@ -1,28 +1,45 @@
 package com.example.posapp.view.login
 
-import android.content.IntentSender
-import android.widget.ImageView
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -34,6 +51,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
+import com.example.posapp.MainActivity
 import com.example.posapp.R
 import com.example.posapp.utils.NavRoute
 import com.example.posapp.utils.RouteApp
@@ -49,18 +67,16 @@ fun LoginView(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val result = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
-            if (it.resultCode == ComponentActivity.RESULT_OK) {
-                viewModel.signInResult(it.data ?: return@rememberLauncherForActivityResult)
-            }
+            viewModel.signInResult(it.data ?: return@rememberLauncherForActivityResult)
         }
     )
     val loginState = viewModel.loginState
     LaunchedEffect(key1 = loginState, block = {
         if (loginState != null) {
-            navController.navigate(NavRoute.Home.route){
-                popUpTo(RouteApp.Login.route){
+            navController.navigate(NavRoute.Home.route) {
+                popUpTo(RouteApp.Login.route) {
                     inclusive = true
                 }
             }
@@ -215,12 +231,11 @@ fun LoginView(
                 Button(
                     onClick = {
                         scope.launch {
-                            val res = viewModel.signInWithGoogle()
-                            result.launch(
-                                IntentSenderRequest.Builder(
-                                    res ?: return@launch
-                                ).build()
-                            )
+                            viewModel.signInWithGoogle(onDataResult = {
+                                result.launch(
+                                    it
+                                )
+                            })
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),

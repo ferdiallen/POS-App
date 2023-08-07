@@ -1,5 +1,6 @@
 package com.example.posapp.utils
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -7,11 +8,13 @@ import android.content.IntentSender
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.result.IntentSenderRequest
+import com.example.posapp.MainActivity
 import com.example.posapp.R
 import com.example.posapp.data.LoginModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -25,23 +28,20 @@ class FirebaseSignIn(
 ) {
     private val auth = Firebase.auth
 
-    suspend fun signIn(): IntentSender? {
+    fun signIn(onStartActivityResult: (Intent) -> Unit): PendingIntent {
         val res = try {
-            /*oneTapClient.beginSignIn(setupSignInRequest()).await()*/
             client
         } catch (e: Exception) {
             if (e is CancellationException) throw e
             null
         }
-        return PendingIntent.getActivities(
-            context, ComponentActivity.RESULT_OK,
+        val data = PendingIntent.getActivities(
+            context, 100,
             arrayOf(res?.signInIntent),
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        ).intentSender
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        onStartActivityResult.invoke(client.signInIntent)
+        return data
     }
 
     fun getSignInUser(): LoginModel? {
@@ -55,7 +55,8 @@ class FirebaseSignIn(
 
     suspend fun signOut() {
         try {
-            oneTapClient.signOut().await()
+            /*oneTapClient.signOut().await()*/
+            client.signOut().await()
             auth.signOut()
         } catch (e: Exception) {
             if (e is CancellationException) throw e
@@ -63,9 +64,8 @@ class FirebaseSignIn(
     }
 
     suspend fun getSignInResult(intent: Intent): LoginModel? {
-        val credential = oneTapClient.getSignInCredentialFromIntent(intent)
-        val googleIdToken = credential.googleIdToken
-        val googleAccount = GoogleAuthProvider.getCredential(googleIdToken, null)
+        val credential = GoogleSignIn.getSignedInAccountFromIntent(intent).result.idToken
+        val googleAccount = GoogleAuthProvider.getCredential(credential, null)
         return try {
             val user = auth.signInWithCredential(googleAccount).await().user
             user?.let {
@@ -75,6 +75,7 @@ class FirebaseSignIn(
                 )
             }
         } catch (e: java.lang.Exception) {
+            println(e.message)
             if (e is CancellationException) throw e
             null
         }

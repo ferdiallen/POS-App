@@ -1,5 +1,6 @@
 package com.example.posapp.view.login
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentSender
 import androidx.compose.runtime.getValue
@@ -24,8 +25,8 @@ class LoginViewModel @Inject constructor(
         loginState = client.getSignInUser()
     }
 
-    suspend fun signInWithGoogle(): IntentSender? {
-        return client.signIn()
+    fun signInWithGoogle(onDataResult:(Intent)->Unit): PendingIntent {
+        return client.signIn(onStartActivityResult = onDataResult::invoke)
     }
 
     fun signInResult(intent: Intent) = viewModelScope.launch {
