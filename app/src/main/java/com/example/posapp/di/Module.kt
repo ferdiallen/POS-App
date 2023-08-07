@@ -5,7 +5,10 @@ import android.content.Intent
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.posapp.R
+import com.example.posapp.data.dao.CheckoutDao
+import com.example.posapp.data.dao.ProductDao
 import com.example.posapp.data.database.ProductDatabase
+import com.example.posapp.repository.CheckoutRepository
 import com.example.posapp.repository.Repository
 import com.example.posapp.utils.FirebaseSignIn
 import com.google.android.gms.auth.api.identity.Identity
@@ -67,4 +70,9 @@ class Module {
     fun providesRepository(db: ProductDatabase): Repository {
         return Repository(db.dao())
     }
+
+    @Provides
+    @Singleton
+    fun providesCheckoutDao(db:ProductDatabase):CheckoutRepository =
+        CheckoutRepository(db.checkoutDao())
 }
