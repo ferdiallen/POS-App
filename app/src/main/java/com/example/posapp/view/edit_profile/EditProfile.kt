@@ -34,13 +34,13 @@ fun EditProfileView(
     }
 
     val namaToko = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf("")
     }
     val nama = remember {
-        mutableStateOf(TextFieldValue("${information?.username}"))
+        mutableStateOf("${information?.username}")
     }
     val email = remember {
-        mutableStateOf(TextFieldValue("${information?.email}"))
+        mutableStateOf("${information?.email}")
     }
     val handPhone = remember {
         mutableStateOf(TextFieldValue(""))
@@ -66,11 +66,17 @@ fun EditProfileView(
                 Spacer(modifier = Modifier.height(30.dp))
                 PickRoundedPhoto(uriImage = getUri,information)
                 Spacer(modifier = Modifier.height(20.dp))
-                CustomForm(mutableString = namaToko , desc = "Nama Toko" )
+                CustomForm(text = namaToko.value , desc = "Nama Toko", onChange = {
+                    namaToko.value = it
+                } )
                 Spacer(modifier = Modifier.height(15.dp))
-                CustomForm(mutableString = nama , desc = "Nama" )
+                CustomForm(text = nama.value , desc = "Nama", onChange = {
+                    nama.value = it
+                } )
                 Spacer(modifier = Modifier.height(15.dp))
-                CustomForm(mutableString = email , desc = "Email" )
+                CustomForm(text = email.value , desc = "Email" , onChange = {
+                    email.value = it
+                })
                 Spacer(modifier = Modifier.height(15.dp))
                 FormTelphone(nomor = handPhone)
             }
