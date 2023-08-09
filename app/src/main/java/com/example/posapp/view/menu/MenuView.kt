@@ -11,12 +11,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.data.CheckoutModel
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.viewmodels.CheckoutViewModel
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
 import java.net.URLEncoder
@@ -30,7 +33,10 @@ fun MenuView(
 ) {
 
     val viewModel:MenuViewModel = hiltViewModel()
+    val checkoutViewModel:CheckoutViewModel = hiltViewModel()
+
     val uiState = viewModel.uiState.collectAsState().value
+    val context = LocalContext.current
 
     val category = listOf(
         "Makanan",
@@ -176,7 +182,11 @@ fun MenuView(
                                     itemsIndexed(uiState) { index, item ->
                                         MenuContentGrid(data = item,
                                             clickListener = {
-                                                            addButton.invoke()
+                                                checkoutViewModel.insertCheckout(CheckoutModel(
+                                                    name = item.namaProduk,
+                                                    image = item.fotoProduk,
+                                                    price = item.harga
+                                                ))
                                             },
                                             navigate = {
                                             val encodedUrl = URLEncoder.encode(item.fotoProduk,
@@ -197,6 +207,11 @@ fun MenuView(
                                             StandardCharsets.UTF_8.toString())
                                         MenuContentGrid(data = item,
                                             clickListener = {
+                                                checkoutViewModel.insertCheckout(CheckoutModel(
+                                                    name = item.namaProduk,
+                                                    image = item.fotoProduk,
+                                                    price = item.harga
+                                                ))
                                                 addButton.invoke()
                                             },navigate = {
                                             navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
