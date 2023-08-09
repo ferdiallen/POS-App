@@ -13,10 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.RouteApp
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,6 +28,9 @@ fun MenuView(
     navController:NavController,
     addButton: () -> Unit
 ) {
+
+    val viewModel:MenuViewModel = hiltViewModel()
+    val uiState = viewModel.uiState.collectAsState().value
 
     val category = listOf(
         "Makanan",
@@ -36,6 +43,12 @@ fun MenuView(
     val currentIndex = remember {
         mutableStateOf(0)
     }
+
+    val categoryList = remember(currentIndex.value) {
+        mutableStateOf(if (currentIndex.value == 0)"Makanan" else "Minuman")
+    }
+
+    viewModel.getMenu(categoryList.value)
 
     val pagerState = com.google.accompanist.pager.rememberPagerState()
 
@@ -156,35 +169,38 @@ fun MenuView(
                     currentIndex.value = it
                     when (it) {
                         0 -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
                                 content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController
-                                        ) {
-                                            addButton.invoke()
-                                        }
+                                    itemsIndexed(uiState) { index, item ->
+                                        MenuContentGrid(data = item,
+                                            clickListener = {
+                                                            addButton.invoke()
+                                            },
+                                            navigate = {
+                                            val encodedUrl = URLEncoder.encode(item.fotoProduk,
+                                                StandardCharsets.UTF_8.toString())
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
+
+                                        })
 
                                     }
                                 })
                         }
-                        else -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
-                                content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController
-                                        ) {
 
-                                        }
+                        else -> {
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                content = {
+                                    itemsIndexed(uiState) { index, item ->
+                                        val encodedUrl = URLEncoder.encode(item.fotoProduk,
+                                            StandardCharsets.UTF_8.toString())
+                                        MenuContentGrid(data = item,
+                                            clickListener = {
+                                                addButton.invoke()
+                                            },navigate = {
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
+                                        })
 
                                     }
                                 })

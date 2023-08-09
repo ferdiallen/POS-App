@@ -12,6 +12,9 @@ interface ProductDao {
     @Query("SELECT * FROM ProductEntity")
     fun showAllSavedTransaction(): Flow<List<ProductEntity>>
 
+    @Query("SELECT * FROM ProductEntity WHERE kategori LIKE :kategori")
+    fun kategoriProduct(kategori: String):Flow<List<ProductEntity>>
+
     @Insert
     suspend fun saveNewProduct(data: ProductEntity)
 
