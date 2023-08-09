@@ -34,7 +34,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.posapp.R
+import com.example.posapp.data.LoginModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -43,12 +45,14 @@ import java.io.InputStream
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PickRoundedPhoto(
-    uriImage:MutableState<Uri?>
+    uriImage:MutableState<Uri?>,
+    information:LoginModel?
 ) {
     val context = LocalContext.current
     val bitmap = remember {
         mutableStateOf<Bitmap?>( null)
     }
+
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
         onResult = {
                 uri: Uri? ->
@@ -92,9 +96,13 @@ fun PickRoundedPhoto(
                         .size(80.dp)
                 ) {
                     if (bitmap.value == null) {
-                        Image(painter = painterResource(id = R.drawable.profile_male ),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop)
+//                        Image(painter = painterResource(id = R.drawable.profile_male ),
+//                            contentDescription = null,
+//                            contentScale = ContentScale.Crop)
+                        AsyncImage(
+                            model = information?.profilePicture,
+                            contentDescription = ""
+                        )
                     } else {
                         Image(bitmap = bitmap.value!!.asImageBitmap(),
                             contentDescription =  null,
