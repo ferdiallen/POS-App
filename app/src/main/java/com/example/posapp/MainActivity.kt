@@ -17,12 +17,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.posapp.ui.theme.POSAppTheme
 import com.example.posapp.view.MainView
 import com.example.posapp.view.home.HomeView
+import com.example.posapp.viewmodels.CheckoutViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.mazenrashed.printooth.Printooth
@@ -169,40 +172,67 @@ class MainActivity : ComponentActivity() {
 //                    .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
 //                    .build())
 
+        setContent {
 
-        add(
-            TextPrintable.Builder()
-                .setText("Printer")
-                .setLineSpacing(DefaultPrinter.LINE_SPACING_60)
-                .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
-                .setFontSize(DefaultPrinter.FONT_SIZE_LARGE)
-                .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
-                .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
-                .setNewLinesAfter(1)
-                .build()
-        )
+            val checkout:CheckoutViewModel = hiltViewModel()
+            val uiState = checkout.uiState.collectAsState().value
+            add(
+                TextPrintable.Builder()
+                    .setText("Pesanan")
+                    .setLineSpacing(DefaultPrinter.LINE_SPACING_60)
+                    .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
+                    .setFontSize(DefaultPrinter.FONT_SIZE_LARGE)
+                    .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                    .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                    .setNewLinesAfter(1)
+                    .build()
+            )
+            add(
+                TextPrintable.Builder()
+                    .setText("======================")
+                    .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
+                    .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                    .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                    .setNewLinesAfter(1)
+                    .build()
+            )
 
+        uiState.forEach {
+            item ->
+            add(
+                TextPrintable.Builder()
+                    .setText("Nama Produk: ${item.name}")
+                    .setAlignment(DefaultPrinter.ALIGNMENT_RIGHT)
+                    .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                    .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                    .setNewLinesAfter(1)
+                    .build()
+            )
 
-        add(
-            TextPrintable.Builder()
-                .setText("TID: 1111123322")
-                .setCharacterCode(DefaultPrinter.CHARCODE_PC1252)
-                .setNewLinesAfter(1)
-                .build()
-        )
+            add(
+                TextPrintable.Builder()
+                    .setText("Harga Produk: ${item.price}")
+                    .setAlignment(DefaultPrinter.ALIGNMENT_RIGHT)
+                    .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                    .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                    .setNewLinesAfter(1)
+                    .build()
+            )
 
+            add(
+                TextPrintable.Builder()
+                    .setText("======================")
+                    .setAlignment(DefaultPrinter.ALIGNMENT_CENTER)
+                    .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
+                    .setUnderlined(DefaultPrinter.UNDERLINED_MODE_OFF)
+                    .setNewLinesAfter(1)
+                    .build()
+            )
+        }
 
-        add(
-            TextPrintable.Builder()
-                .setText("Hello World")
-                .setAlignment(DefaultPrinter.ALIGNMENT_RIGHT)
-                .setEmphasizedMode(DefaultPrinter.EMPHASIZED_MODE_BOLD)
-                .setUnderlined(DefaultPrinter.UNDERLINED_MODE_ON)
-                .setNewLinesAfter(1)
-                .build()
-        )
+            add(RawPrintable.Builder(byteArrayOf(27, 100, 4)).build())
+        }
 
-        add(RawPrintable.Builder(byteArrayOf(27, 100, 4)).build())
 
     }
 

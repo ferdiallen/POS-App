@@ -74,7 +74,7 @@ fun MainView(
                     cetak = {
                         cetak.invoke()
                     }) {
-                    cart.value = cart.value + 1
+
                     Log.d("ShowValue ",showFloat.value.toString())
                 }
 

@@ -14,14 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.posapp.R
+import com.example.posapp.data.CheckoutModel
 
 @Composable
 fun ItemOrder(
-    item: Int,
-    namaMakanan: List<String>,
+    item: CheckoutModel,
     index: Int,
-    harga: List<String>,
     value: MutableState<Int>
 ) {
     Surface(
@@ -45,8 +45,8 @@ fun ItemOrder(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = item),
+                AsyncImage(
+                    model = item.image,
                     contentDescription = null,
                     modifier = Modifier
                         .size(80.dp)
@@ -54,13 +54,13 @@ fun ItemOrder(
                 Spacer(modifier = Modifier.width(3.dp))
                 Column {
                     Text(
-                        text = namaMakanan[index],
+                        text = item.name,
                         style = MaterialTheme.typography.h1,
                         color = MaterialTheme.colors.primary,
                         fontSize = 14.sp
                     )
                     Text(
-                        text = harga[index],
+                        text = item.price.toString(),
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.secondary,
                         fontSize = 14.sp
