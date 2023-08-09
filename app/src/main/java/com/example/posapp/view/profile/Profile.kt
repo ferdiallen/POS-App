@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.posapp.R
 import com.example.posapp.utils.NavRoute
 import com.example.posapp.utils.RouteApp
@@ -28,6 +29,8 @@ fun Profile(
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
     val state = rememberScrollState()
+
+    val userInformation = viewModel.currentUserData
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.background
@@ -74,9 +77,13 @@ fun Profile(
                             modifier = Modifier
                                 .size(40.dp)
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.profile_male),
-                                contentDescription = null
+//                            Image(
+//                                painter = painterResource(id = R.drawable.profile_male),
+//                                contentDescription = null
+//                            )
+                            AsyncImage(
+                                model = userInformation?.profilePicture,
+                                contentDescription = ""
                             )
                         }
                         Spacer(modifier = Modifier.width(10.dp))
@@ -88,13 +95,13 @@ fun Profile(
                                 fontSize = 12.sp
                             )
                             Text(
-                                text = "Buddy Setiawan",
+                                text = "${userInformation?.username}",
                                 style = MaterialTheme.typography.h1,
                                 color = MaterialTheme.colors.surface,
                                 fontSize = 12.sp
                             )
                             Text(
-                                text = "buddy@gmail.com",
+                                text = "${userInformation?.email}",
                                 style = MaterialTheme.typography.body2,
                                 color = Color(0xFF797979),
                                 fontSize = 10.sp

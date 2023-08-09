@@ -13,7 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.posapp.view.profile.ProfileViewModel
 import com.example.posapp.widgets.edit_profile.CustomForm
 import com.example.posapp.widgets.general.FormTelphone
 import com.example.posapp.widgets.general.TopBar
@@ -23,7 +25,10 @@ import com.example.posapp.widgets.manager_produk.PickRoundedPhoto
 fun EditProfileView(
     navController: NavController
 ) {
-    
+
+    val viewModel:ProfileViewModel = hiltViewModel()
+    val information = viewModel.currentUserData
+
     val getUri = remember {
         mutableStateOf<Uri?>(null)
     }
@@ -32,10 +37,10 @@ fun EditProfileView(
         mutableStateOf(TextFieldValue(""))
     }
     val nama = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf(TextFieldValue("${information?.username}"))
     }
     val email = remember {
-        mutableStateOf(TextFieldValue(""))
+        mutableStateOf(TextFieldValue("${information?.email}"))
     }
     val handPhone = remember {
         mutableStateOf(TextFieldValue(""))
@@ -59,7 +64,7 @@ fun EditProfileView(
                         color = Color.Transparent )
                 }
                 Spacer(modifier = Modifier.height(30.dp))
-                PickRoundedPhoto(uriImage = getUri)
+                PickRoundedPhoto(uriImage = getUri,information)
                 Spacer(modifier = Modifier.height(20.dp))
                 CustomForm(mutableString = namaToko , desc = "Nama Toko" )
                 Spacer(modifier = Modifier.height(15.dp))
@@ -75,7 +80,7 @@ fun EditProfileView(
         Box(modifier = Modifier
             .fillMaxHeight()
             .wrapContentHeight(Bottom)
-            .padding(start = 18.dp,end = 18.dp)) {
+            .padding(start = 18.dp, end = 18.dp)) {
             Button(onClick = { },
                 modifier = Modifier
                     .fillMaxWidth(),
