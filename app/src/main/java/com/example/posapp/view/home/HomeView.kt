@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ fun HomeView(
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
     val checkoutViewModel: CheckoutViewModel = hiltViewModel()
-
+    val uiState = viewModel.uiState.collectAsState().value
 
 
     val search = remember {
@@ -121,14 +122,8 @@ fun HomeView(
                             MenuContent(
                                 navController,
                                 item,
-                                fotoMakanan,
-                                index,
-                                namaMakanan,
-                                hargaMakanan
-                            ) {
-
-                                addButton.invoke()
-                            }
+                                uiState
+                            )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     })
