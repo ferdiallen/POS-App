@@ -99,6 +99,7 @@ fun MenuContentGrid(
 @Composable
 fun MenuContentGrid(
     data: ProductEntity,
+    onAddProduct: () -> Unit,
     navigate: (String) -> Unit
 ) {
     Surface(
@@ -134,7 +135,7 @@ fun MenuContentGrid(
             ) {
                 Column {
                     Text(
-                        text =data.namaProduk,
+                        text = data.namaProduk,
                         style = MaterialTheme.typography.h1,
                         color = MaterialTheme.colors.surface,
                         fontSize = 10.sp
@@ -146,6 +147,9 @@ fun MenuContentGrid(
                         color = MaterialTheme.colors.secondary,
                         fontSize = 8.sp
                     )
+                }
+                AddButton {
+                onAddProduct.invoke()
                 }
             }
         }

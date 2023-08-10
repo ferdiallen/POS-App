@@ -13,10 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
+import com.example.posapp.utils.CategoryProduct
+import com.example.posapp.utils.RouteApp
 import com.example.posapp.widgets.general.CategoryTemplate
 import com.example.posapp.widgets.menu.MenuContentGrid
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,7 +29,18 @@ fun MenuView(
     navController:NavController,
     addButton: () -> Unit
 ) {
-
+    val viewModel:MenuViewViewModel = hiltViewModel()
+    val data by viewModel.productState.collectAsState(initial = emptyList())
+    val makanan = remember(data) {
+        data.filter {
+            it.kategori == CategoryProduct.MAKANAN.name
+        }
+    }
+    val minuman = remember(data) {
+        data.filter {
+            it.kategori == CategoryProduct.MINUMAN.name
+        }
+    }
     val category = listOf(
         "Makanan",
         "Minuman"
@@ -37,7 +53,7 @@ fun MenuView(
         mutableStateOf(0)
     }
 
-    val pagerState = com.google.accompanist.pager.rememberPagerState()
+    val pagerState = rememberPagerState()
 
     val rekomendasi = listOf(
         "Rekomendasi 1",
@@ -156,35 +172,55 @@ fun MenuView(
                     currentIndex.value = it
                     when (it) {
                         0 -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
                                 content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController
-                                        ) {
-                                            addButton.invoke()
-                                        }
+                                    itemsIndexed(makanan) { index, item ->
+                                        /* MenuContentGrid(
+                                             productList,
+                                             fotoMakanan = fotoMakanan,
+                                             index = index,
+                                             namaMakanan = namaMakanan,
+                                             hargaMakanan = hargaMakanan,
+                                             navController,
+                                             false,
+                                         ) {
+ //                                            addButton.invoke()
+                                         }*/
+                                        MenuContentGrid(data = item, navigate = {
+                                            val encodedUrl = URLEncoder.encode(item.fotoProduk,
+                                                StandardCharsets.UTF_8.toString())
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
+
+                                        }, onAddProduct = {
+                                            viewModel.addProduct(item)
+                                        })
 
                                     }
                                 })
                         }
-                        else -> {
-                            LazyVerticalGrid(columns = GridCells.Fixed(1),
-                                content = {
-                                    itemsIndexed(rekomendasi) { index, item ->
-                                        MenuContentGrid(
-                                            fotoMakanan = fotoMakanan,
-                                            index = index,
-                                            namaMakanan = namaMakanan,
-                                            hargaMakanan = hargaMakanan,
-                                            navController
-                                        ) {
 
-                                        }
+                        else -> {
+                            LazyVerticalGrid(columns = GridCells.Fixed(2),
+                                content = {
+                                    itemsIndexed(minuman) { index, item ->
+                                        /* MenuContentGrid(
+                                             productList,
+                                             fotoMakanan = fotoMakanan,
+                                             index = index,
+                                             namaMakanan = namaMakanan,
+                                             hargaMakanan = hargaMakanan,
+                                             navController,
+                                             false,
+                                         ) {
+    //                                            addButton.invoke()
+                                         }*/
+                                        MenuContentGrid(data = item, navigate = {
+                                            navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${item.fotoProduk}/${item.deskripsi}/${item.harga}")
+                                        }, onAddProduct = {
+                                            viewModel.addProduct(item)
+                                        })
 
                                     }
                                 })

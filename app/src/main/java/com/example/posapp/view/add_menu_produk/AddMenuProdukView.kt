@@ -226,6 +226,8 @@ fun AddMenuProdukView(
                                             val encodedUrl = URLEncoder.encode(item.fotoProduk,StandardCharsets.UTF_8.toString())
                                             navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${encodedUrl}/${item.deskripsi}/${item.harga}")
 
+                                        }, onAddProduct = {
+
                                         })
 
                                     }
@@ -249,6 +251,8 @@ fun AddMenuProdukView(
                                          }*/
                                         MenuContentGrid(data = item, navigate = {
                                             navController.navigate(RouteApp.DetailProduk.route + "/${item.namaProduk}/${item.fotoProduk}/${item.deskripsi}/${item.harga}")
+                                        }, onAddProduct = {
+
                                         })
 
                                     }

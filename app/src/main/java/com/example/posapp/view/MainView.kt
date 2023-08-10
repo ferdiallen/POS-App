@@ -21,16 +21,17 @@ import com.example.posapp.view.navigation.NavigationAdapter
 import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
 import com.example.posapp.viewmodels.CheckoutViewModel
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun MainView(
-    cetak:() -> Unit
+    cetak: () -> Unit
 ) {
 
     val navController = rememberNavController()
     val checkoutViewModel: CheckoutViewModel = hiltViewModel()
-    val uiState = checkoutViewModel.uiState.collectAsState().value
-
+    val uiState = checkoutViewModel.uiState.collectAsState(emptyList()).value
     val cart = remember {
         mutableStateOf(0)
     }
@@ -42,17 +43,29 @@ fun MainView(
         mutableStateOf(false)
     }
 
+    val calculatePrice = remember(uiState.size) {
+        return@remember if (uiState.isEmpty()) {
+            0
+        } else {
+            val res = uiState.map {
+                it.price
+            }.reduce { acc, i -> acc + i }
+
+            res
+        }
+
+    }
+
     showFloat.value = uiState.isNotEmpty()
-    Log.d("INI ISINYA", uiState.toString())
     cart.value = uiState.size
     Box {
         Scaffold(
             Modifier
-                .padding(bottom = if(showBottomBar.value)48.dp else 0.dp),
+                .padding(bottom = if (showBottomBar.value) 48.dp else 0.dp),
             backgroundColor = Color.Transparent,
             floatingActionButton = {
                 AnimatedVisibility(visible = showFloat.value) {
-                    FloatingActCart(cart) {
+                    FloatingActCart(cart, totalPrice = calculatePrice) {
                         cart.value = 0
                         navController.navigate(RouteApp.Pesanan.route)
                     }
@@ -65,25 +78,24 @@ fun MainView(
                 Modifier
                     .padding(it)
                     .padding(bottom = if (showFloat.value) 48.dp else 0.dp)
-                    .fillMaxSize()
-                ,
-                color = Color.Transparent) {
-                NavigationAdapter(navController = navController
-                    ,showBottomBar
-                    ,cart,
+                    .fillMaxSize(),
+                color = Color.Transparent
+            ) {
+                NavigationAdapter(navController = navController, showBottomBar, cart,
                     cetak = {
                         cetak.invoke()
                     }) {
                     cart.value = cart.value + 1
-                    Log.d("ShowValue ",showFloat.value.toString())
                 }
 
             }
 
         }
-        Box(modifier = Modifier
-            .fillMaxHeight()
-            .wrapContentHeight(Bottom)) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .wrapContentHeight(Bottom)
+        ) {
             if (showBottomBar.value) {
                 Surface(
                     color = Color.Transparent,
@@ -103,7 +115,10 @@ fun MainView(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FloatingActCart(cart: MutableState<Int>,onClick:() -> Unit) {
+fun FloatingActCart(cart: MutableState<Int>, totalPrice: Int, onClick: () -> Unit) {
+    val numberFormat = remember{
+        NumberFormat.getCurrencyInstance(Locale("in","ID")).format(totalPrice)
+    }
     Box(
         modifier = Modifier
             .padding(start = 18.dp, end = 18.dp)
@@ -143,7 +158,7 @@ fun FloatingActCart(cart: MutableState<Int>,onClick:() -> Unit) {
                     )
                 }
                 Text(
-                    text = "Total: Rp 50.000",
+                    text = "Total: Rp $numberFormat",
                     style = MaterialTheme.typography.body2,
                     color = MaterialTheme.colors.onSurface,
                     fontSize = 12.sp

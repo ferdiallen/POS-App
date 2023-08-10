@@ -64,7 +64,7 @@ class Module {
 
     @Provides
     @Singleton
-    fun providesDatastoreKasir(preferences: DataStore<Preferences>) : KasirPreferences {
+    fun providesDatastoreKasir(preferences: DataStore<Preferences>): KasirPreferences {
         return KasirPreferences(preferences)
     }
 
@@ -103,7 +103,7 @@ class Module {
     @Provides
     @Singleton
     fun providesRepository(db: ProductDatabase): Repository {
-        return Repository(db.dao())
+        return Repository(productDao = db.dao(), transactionDao = db.transactionDao())
     }
 
     @Provides

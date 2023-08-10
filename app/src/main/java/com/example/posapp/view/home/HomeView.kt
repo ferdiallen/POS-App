@@ -126,12 +126,7 @@ fun HomeView(
                                 namaMakanan,
                                 hargaMakanan
                             ) {
-                                checkoutViewModel.insertCheckout(CheckoutModel(
-                                    name = namaMakanan[0][index],
-                                    price = 5000,
-                                    image = fotoMakanan[0][index].toString()
 
-                                ))
                                 addButton.invoke()
                             }
                             Spacer(modifier = Modifier.height(12.dp))

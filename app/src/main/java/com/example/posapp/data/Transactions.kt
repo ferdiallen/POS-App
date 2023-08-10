@@ -22,8 +22,12 @@ data class ExitTransaction(
     val idTransaksi: Int? = null,
     val waktuTransaksi: String,
     val tanggalTransaksi: String,
-    val itemTransaksi:List<ProductEntity>,
+    val itemTtansaksi:ListItemTransactions,
     val totalHarga: Int,
     val namaKasir: String,
     val kontakKasir: Int
+)
+
+data class ListItemTransactions(
+    val itemTransaksi:List<ProductEntity>
 )
