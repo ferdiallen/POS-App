@@ -11,7 +11,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.posapp.data.LoginModel
 import com.example.posapp.utils.FirebaseSignIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,11 +31,13 @@ class LoginViewModel @Inject constructor(
         return client.signIn(onStartActivityResult = onDataResult::invoke)
     }
 
-    fun signInResult(intent: Intent) = viewModelScope.launch {
+    fun signInResult(intent: Intent) = viewModelScope.launch(Dispatchers.IO) {
         val res = client.getSignInResult(intent)
 
-        res?.run {
-            loginState = LoginModel(userId, username, email)
+        res?.let {
+            withContext(Dispatchers.Main){
+                loginState = LoginModel(it.userId, it.username, it.email)
+            }
         }
     }
 }
