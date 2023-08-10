@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.example.posapp.R
 import com.example.posapp.data.CheckoutModel
 import com.example.posapp.data.ProductEntity
+import com.example.posapp.data.toCheckOutModel
 import com.example.posapp.utils.RouteApp
 import com.example.posapp.viewmodels.CheckoutViewModel
 import com.example.posapp.widgets.menu.MenuContentGrid
@@ -46,15 +47,10 @@ fun MenuContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             listProduct.forEachIndexed { index, item ->
-
                 MenuContentGrid(data = item,
-                    clickListener = {
+                    onAddProduct = {
                         checkoutViewModel.insertCheckout(
-                            CheckoutModel(
-                            name = item.namaProduk,
-                            image = item.fotoProduk,
-                            price = item.harga
-                        )
+                          item.toCheckOutModel()
                         )
                     },
                     navigate = {

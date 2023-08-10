@@ -116,7 +116,7 @@ fun MainView(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FloatingActCart(cart: MutableState<Int>, totalPrice: Int, onClick: () -> Unit) {
-    val numberFormat = remember{
+    val numberFormat = remember(totalPrice){
         NumberFormat.getCurrencyInstance(Locale("in","ID")).format(totalPrice)
     }
     Box(
