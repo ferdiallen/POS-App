@@ -9,6 +9,8 @@ class Repository @Inject constructor(
 ) {
     fun showAllProductData() = productDao.showAllSavedTransaction()
     fun kategoriProduct(kategori:String) = productDao.kategoriProduct(kategori)
+    fun limitRekomendasiProduct() = productDao.limitRekomendasiProduct()
+
 
     suspend fun insertProduct(productEntity: ProductEntity) = productDao.saveNewProduct(productEntity)
 }
