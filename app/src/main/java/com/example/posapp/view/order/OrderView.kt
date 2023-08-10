@@ -8,10 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -23,11 +20,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.posapp.R
 import com.example.posapp.utils.RouteApp
+import com.example.posapp.viewmodels.CheckoutViewModel
 import com.example.posapp.widgets.general.TopBar
 import com.example.posapp.widgets.order.ItemOrder
+import java.text.NumberFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -35,6 +36,25 @@ fun OrderView(
     navController: NavController
 ) {
 
+    val checkoutViewModel:CheckoutViewModel = hiltViewModel()
+    val uiState = checkoutViewModel.uiState.collectAsState(emptyList()).value
+
+    val calculatePrice = remember(uiState.size) {
+        return@remember if (uiState.isEmpty()) {
+            0
+        } else {
+            val res = uiState.map {
+                it.price
+            }.reduce { acc, i -> acc + i }
+
+            res
+        }
+
+    }
+
+    val numberFormat = remember (calculatePrice){
+        NumberFormat.getCurrencyInstance(Locale("in","ID")).format(calculatePrice)
+    }
     val listMakanan = listOf(
         R.drawable.ayam_kotak,
         R.drawable.esteh_kotak
@@ -51,6 +71,7 @@ fun OrderView(
     val catatan = remember {
         mutableStateOf("")
     }
+
 
     Scaffold(
         backgroundColor = MaterialTheme.colors.background,
@@ -76,7 +97,7 @@ fun OrderView(
                         fontSize = 12.sp,
                         color = MaterialTheme.colors.surface)
 
-                    Text(text = "Rp. 80.000",
+                    Text(text =numberFormat,
                         style = MaterialTheme.typography.h3,
                         fontSize = 12.sp,
                         color = MaterialTheme.colors.surface)
@@ -116,11 +137,11 @@ fun OrderView(
                 TopBar(navController, "Pesanan", Color.Transparent)
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn(content = {
-                    itemsIndexed(listMakanan) { index, item ->
+                    itemsIndexed(uiState) { index, item ->
                         val value = remember {
                             mutableStateOf(index + 1)
                         }
-                        ItemOrder(item, namaMakanan, index, harga, value)
+                        ItemOrder(item ,index, value)
                         Spacer(modifier = Modifier.height(6.dp))
                     }
                 })

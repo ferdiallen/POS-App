@@ -19,9 +19,6 @@ class CheckoutViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState =  repo.getCheckout()
 
-    init {
-    }
-
     fun insertCheckout(model: CheckoutModel) =
         viewModelScope.launch {
             repo.insertCheckout(model)
