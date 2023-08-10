@@ -24,7 +24,7 @@ import java.util.Locale
 @Composable
 fun ItemOrder(
     item: CheckoutModel,
-    index: Int,
+    quantity: Int,
     value: MutableState<Int>
 ) {
     val numberFormat = remember{
@@ -92,7 +92,7 @@ fun ItemOrder(
 
                         ) {
                             Text(
-                                text = value.value.toString(),
+                                text = quantity.toString(),
                                 style = MaterialTheme.typography.body2,
                                 color = Color(0xFF979797),
                                 fontSize = 8.sp,

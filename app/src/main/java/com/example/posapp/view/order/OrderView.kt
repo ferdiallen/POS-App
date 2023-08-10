@@ -51,7 +51,18 @@ fun OrderView(
         }
 
     }
-
+    val data = remember(uiState) {
+        if(uiState.isEmpty()) emptyMap<String,List<String>>()
+        val res = uiState.groupBy {
+            it.name
+        }
+        res
+    }
+    LaunchedEffect(key1 = uiState.size, block = {
+        data.forEach {
+            println(it.key)
+        }
+    })
     val numberFormat = remember (calculatePrice){
         NumberFormat.getCurrencyInstance(Locale("in","ID")).format(calculatePrice)
     }
@@ -137,11 +148,17 @@ fun OrderView(
                 TopBar(navController, "Pesanan", Color.Transparent)
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn(content = {
-                    itemsIndexed(uiState) { index, item ->
+                    itemsIndexed(data.toList()) { index, item ->
+                        val quantity = remember {
+                            item.second.size
+                        }
+                        val whichItem = remember{
+                            item.second.first()
+                        }
                         val value = remember {
                             mutableStateOf(index + 1)
                         }
-                        ItemOrder(item ,index, value)
+                        ItemOrder(whichItem ,quantity, value)
                         Spacer(modifier = Modifier.height(6.dp))
                     }
                 })
