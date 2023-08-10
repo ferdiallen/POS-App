@@ -97,7 +97,10 @@ class Module {
         return Room.databaseBuilder(
             context, ProductDatabase::class.java,
             "db_data"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+
     }
 
     @Provides
